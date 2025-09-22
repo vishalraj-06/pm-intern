@@ -54,10 +54,16 @@
     .hero-card{background:#fff;color:#222;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:18px}
     .hero-card h3{margin:6px 0 8px;font-size:16px}
 
-    /* Marquee partners */
-    .partners{background:#fff}
-    .partners .wrap{max-width:1200px;margin:auto;padding:18px 16px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;opacity:.85}
-    .pill{padding:8px 12px;border:1px dashed #d9d9d9;border-radius:999px;font-weight:700;color:#555}
+    /* Company Swiper */
+    .partners{background:#fff;overflow:hidden}
+    .partners .wrap{max-width:1200px;margin:auto;padding:18px 16px}
+    .swiper-container{width:100%;height:80px;overflow:hidden}
+    .swiper-wrapper{display:flex;animation:scroll 20s linear infinite;height:80px;align-items:center}
+    .swiper-slide{flex-shrink:0;margin:0 20px;display:flex;align-items:center;justify-content:center}
+    .company-logo{height:60px;width:auto;max-width:120px;object-fit:contain;opacity:0.7;transition:opacity 0.3s ease,transform 0.3s ease}
+    .company-logo:hover{opacity:1;transform:scale(1.1)}
+    @keyframes scroll{0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
+    .swiper-wrapper:hover{animation-play-state:paused}
 
     /* Eligibility + Benefits */
     .section{max-width:1200px;margin:28px auto;padding:0 16px}
@@ -66,9 +72,17 @@
     .card{background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(21,41,91,.08);padding:18px}
 
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .info{background:#f6f9ff;border:1px solid #dbe6ff;border-radius:12px;padding:14px;text-align:center}
+    .info{background:#f6f9ff;border:1px solid #dbe6ff;border-radius:12px;padding:14px;text-align:center;transition:all 0.3s ease}
     .info b{display:block;font-size:18px;color:#000;margin-top:8px}
     .info small{color:#5b6b8b}
+    
+    /* Icon effects for eligibility and benefits */
+    .eligibility-item, .benefit-item{position:relative;overflow:hidden}
+    .eligibility-item:hover, .benefit-item:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(45,79,147,0.15);border-color:#2d4f93}
+    .eligibility-icon, .benefit-icon{font-size:24px;margin-bottom:8px;transition:transform 0.3s ease}
+    .eligibility-item:hover .eligibility-icon, .benefit-item:hover .benefit-icon{transform:scale(1.2) rotate(10deg)}
+    .eligibility-item:hover{background:linear-gradient(135deg,#f6f9ff 0%,#e6f0ff 100%)}
+    .benefit-item:hover{background:linear-gradient(135deg,#fff9f0 0%,#ffe6cc 100%);border-color:#ff7a00}
 
     /* Footer */
     .footer{background:var(--primary);color:#cfd7ff;margin-top:28px}
@@ -138,13 +152,11 @@
 
   <section class="partners">
     <div class="wrap">
-      <span class="pill">ACC</span>
-      <span class="pill">ZOHO</span>
-      <span class="pill">BPCL</span>
-      <span class="pill">SBI</span>
-      <span class="pill">Titan</span>
-      <span class="pill">CCL</span>
-      <span class="pill">Reliance</span>
+      <div class="swiper-container">
+        <div class="swiper-wrapper" id="companySwiper">
+          <!-- Company logos will be loaded here dynamically -->
+        </div>
+      </div>
     </div>
   </section>
 
@@ -152,23 +164,59 @@
     <div class="card">
       <h2>Are you <span style="color:#ff7a00">Eligible</span>?</h2>
       <div class="grid">
-        <div class="info"><b>Age</b><small>21-24 Years</small></div>
-        <div class="info"><b>Job Status</b><small>Not Employed Full Time</small></div>
-        <div class="info"><b>Education</b><small>Not Enrolled Full Time</small></div>
-        <div class="info"><b>Family Income</b><small>No one earning > ₹8 Lakh PA</small></div>
-        <div class="info"><b>Govt. Employment</b><small>No member has a Govt. job</small></div>
-        <div class="info"><b>Other Schemes</b><small>Not in Apprenticeship/NATS/NAPS</small></div>
+        <div class="info eligibility-item">
+          <div class="eligibility-icon">🎂</div>
+          <b>Age</b><small>21-24 Years</small>
+        </div>
+        <div class="info eligibility-item">
+          <div class="eligibility-icon">💼</div>
+          <b>Job Status</b><small>Not Employed Full Time</small>
+        </div>
+        <div class="info eligibility-item">
+          <div class="eligibility-icon">🎓</div>
+          <b>Education</b><small>Not Enrolled Full Time</small>
+        </div>
+        <div class="info eligibility-item">
+          <div class="eligibility-icon">💰</div>
+          <b>Family Income</b><small>No one earning > ₹8 Lakh PA</small>
+        </div>
+        <div class="info eligibility-item">
+          <div class="eligibility-icon">🏛️</div>
+          <b>Govt. Employment</b><small>No member has a Govt. job</small>
+        </div>
+        <div class="info eligibility-item">
+          <div class="eligibility-icon">📋</div>
+          <b>Other Schemes</b><small>Not in Apprenticeship/NATS/NAPS</small>
+        </div>
       </div>
     </div>
     <div class="card" id="benefits">
       <h2>Core Benefits <span style="color:#ff7a00">for PM Internship Scheme</span></h2>
       <div class="grid">
-        <div class="info"><b>12 months real-life experience</b><small>with India’s top companies</small></div>
-        <div class="info"><b>Monthly assistance</b><small>₹4500 by GoI + ₹500 by Industry</small></div>
-        <div class="info"><b>One-time grant</b><small>₹6000 for incidentals</small></div>
-        <div class="info"><b>Choose from sectors</b><small>and top companies of India</small></div>
-        <div class="info"><b>Mentorship</b><small>Guided learning and growth</small></div>
-        <div class="info"><b>Nationwide opportunities</b><small>State/District-wise listings</small></div>
+        <div class="info benefit-item">
+          <div class="benefit-icon">⏰</div>
+          <b>12 months real-life experience</b><small>with India's top companies</small>
+        </div>
+        <div class="info benefit-item">
+          <div class="benefit-icon">💵</div>
+          <b>Monthly assistance</b><small>₹4500 by GoI + ₹500 by Industry</small>
+        </div>
+        <div class="info benefit-item">
+          <div class="benefit-icon">🎁</div>
+          <b>One-time grant</b><small>₹6000 for incidentals</small>
+        </div>
+        <div class="info benefit-item">
+          <div class="benefit-icon">🏢</div>
+          <b>Choose from sectors</b><small>and top companies of India</small>
+        </div>
+        <div class="info benefit-item">
+          <div class="benefit-icon">👨‍🏫</div>
+          <b>Mentorship</b><small>Guided learning and growth</small>
+        </div>
+        <div class="info benefit-item">
+          <div class="benefit-icon">🌍</div>
+          <b>Nationwide opportunities</b><small>State/District-wise listings</small>
+        </div>
       </div>
     </div>
   </section>
@@ -185,6 +233,12 @@
     <div class="modal-card">
       <div class="modal-head">Login <button class="btn btn-outline" onclick="closeModal('loginModal')">✕</button></div>
       <div class="modal-body">
+        <!-- Demo Credentials Display -->
+        <div style="background: #f0f4ff; border: 1px solid #b3d7ff; padding: 10px; margin-bottom: 15px; border-radius: 8px; font-size: 14px;">
+          <strong>Demo Credentials:</strong><br>
+          Email: <span style="color: #2d4f93; font-weight: 600;">test@gmail.com</span><br>
+          Password: <span style="color: #2d4f93; font-weight: 600;">password123</span>
+        </div>
         <form id="loginForm">
           <div class="field">
             <label for="loginId">Email or Mobile</label>
@@ -194,7 +248,8 @@
             <label for="loginPass">Password</label>
             <input id="loginPass" name="loginPass" type="password" required placeholder="Enter password"/>
           </div>
-          <button class="btn btn-primary" type="submit" style="width:100%">Login</button>
+          <div id="loginError" style="color: #dc3545; font-size: 14px; margin: 10px 0; display: none;"></div>
+          <button class="btn btn-primary" type="submit" style="width:100%" id="loginButton">Login</button>
         </form>
       </div>
     </div>
@@ -202,23 +257,193 @@
 
   <!-- Registration Modal -->
   <div class="modal" id="registerModal">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width: 600px;">
       <div class="modal-head">Youth Registration <button class="btn btn-outline" onclick="closeModal('registerModal')">✕</button></div>
       <div class="modal-body">
+        <!-- Registration Success Message -->
+        <div id="registrationSuccess" style="display: none; text-align: center; padding: 20px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; margin-bottom: 20px; color: #155724;">
+          <h3 style="color: #155724; margin-bottom: 10px;">✓ Registration Successful!</h3>
+          <p>Your account has been created successfully. You can now login with your credentials.</p>
+        </div>
+        
         <form id="registerForm">
-          <div class="field"><label for="name">Full Name</label><input id="name" name="name" required/></div>
-          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required/></div>
-          <div class="row">
-            <div class="field" style="flex:1"><label for="mobile">Mobile</label><input id="mobile" name="mobile" required/></div>
-            <div class="field" style="flex:1"><label for="password">Password</label><input id="password" name="password" type="password" required/></div>
+          <!-- Personal Information -->
+          <div style="margin-bottom: 20px;">
+            <h4 style="color: #2d4f93; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Personal Information</h4>
+            <div class="field">
+              <label for="regName">Full Name *</label>
+              <input id="regName" name="name" required placeholder="Enter your full name"/>
+            </div>
+            <div class="row">
+              <div class="field" style="flex:1">
+                <label for="regEmail">Email *</label>
+                <input id="regEmail" name="email" type="email" required placeholder="your.email@example.com"/>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="regMobile">Mobile Number *</label>
+                <input id="regMobile" name="mobile" type="tel" required placeholder="10-digit mobile number" pattern="[0-9]{10}"/>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-accent" type="submit" style="width:100%">Create Account</button>
+          
+          <!-- Account Security -->
+          <div style="margin-bottom: 20px;">
+            <h4 style="color: #2d4f93; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Account Security</h4>
+            <div class="row">
+              <div class="field" style="flex:1">
+                <label for="regPassword">Password *</label>
+                <input id="regPassword" name="password" type="password" required placeholder="Minimum 6 characters" minlength="6"/>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="regConfirmPassword">Confirm Password *</label>
+                <input id="regConfirmPassword" name="confirmPassword" type="password" required placeholder="Re-enter password"/>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Additional Information -->
+          <div style="margin-bottom: 20px;">
+            <h4 style="color: #2d4f93; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Additional Information</h4>
+            <div class="row">
+              <div class="field" style="flex:1">
+                <label for="regDateOfBirth">Date of Birth *</label>
+                <input id="regDateOfBirth" name="dateOfBirth" type="date" required/>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="regGender">Gender *</label>
+                <select id="regGender" name="gender" required>
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field" style="flex:1">
+                <label for="regQualification">Highest Qualification *</label>
+                <select id="regQualification" name="qualification" required>
+                  <option value="">Select Qualification</option>
+                  <option value="10th">10th Pass</option>
+                  <option value="12th">12th Pass</option>
+                  <option value="diploma">Diploma</option>
+                  <option value="bachelors">Bachelor's Degree</option>
+                  <option value="masters">Master's Degree</option>
+                </select>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="regCourse">Course/Stream *</label>
+                <input id="regCourse" name="course" required placeholder="e.g., Computer Science, Commerce"/>
+              </div>
+            </div>
+            <div class="field">
+              <label for="regSkills">Skills & Interests</label>
+              <input id="regSkills" name="skills" placeholder="e.g., Programming, Finance, Communication, Data Analysis" style="width: 100%;"/>
+              <small style="color: #666; font-size: 12px; margin-top: 5px;">Separate multiple skills with commas - this helps us recommend better internships</small>
+            </div>
+          </div>
+          
+          <!-- Preferences for AI Matching -->
+          <div style="margin-bottom: 20px;">
+            <h4 style="color: #2d4f93; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ddd;">Internship Preferences</h4>
+            <div class="row">
+              <div class="field" style="flex:1">
+                <label for="regPreferredLocation">Preferred Location</label>
+                <select id="regPreferredLocation" name="preferredLocation">
+                  <option value="Any">Any Location</option>
+                  <option value="Bangalore">Bangalore</option>
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Delhi">Delhi/NCR</option>
+                  <option value="Chennai">Chennai</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Kolkata">Kolkata</option>
+                  <option value="Ahmedabad">Ahmedabad</option>
+                </select>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="regPreferredIndustry">Industry Interest</label>
+                <select id="regPreferredIndustry" name="preferredIndustry">
+                  <option value="Open to all">Open to All</option>
+                  <option value="Information Technology">Information Technology</option>
+                  <option value="Banking & Finance">Banking & Finance</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Social Work">Social Work</option>
+                  <option value="Urban Planning">Urban Planning</option>
+                  <option value="Media & Communication">Media & Communication</option>
+                  <option value="Marketing & Sales">Marketing & Sales</option>
+                  <option value="Healthcare">Healthcare</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field" style="flex:1">
+                <label for="regInternshipType">Internship Type Preference</label>
+                <select id="regInternshipType" name="internshipType">
+                  <option value="any">Both Paid & Unpaid</option>
+                  <option value="paid">Paid Internships Only</option>
+                  <option value="unpaid">Unpaid Internships Only</option>
+                </select>
+              </div>
+              <div class="field" style="flex:1">
+                <label for="regDurationPreference">Duration Preference</label>
+                <select id="regDurationPreference" name="durationPreference">
+                  <option value="any">Any Duration</option>
+                  <option value="short">1-3 Months</option>
+                  <option value="medium">3-6 Months</option>
+                  <option value="long">6+ Months</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="regCareerGoals">Career Goals (Optional)</label>
+              <input id="regCareerGoals" name="careerGoals" placeholder="What do you hope to achieve through this internship?"/>
+              <small style="color: #666; font-size: 12px; margin-top: 5px;">This helps our AI recommend the most suitable opportunities</small>
+            </div>
+          </div>
+          
+          <!-- Terms and Conditions -->
+          <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.4;">
+              <input type="checkbox" id="agreeTerms" required style="margin-top: 2px;"/>
+              I confirm that I am eligible for the PM Internship Scheme and agree to the 
+              <a href="#" style="color: #2d4f93; text-decoration: underline;">Terms & Conditions</a> and 
+              <a href="#" style="color: #2d4f93; text-decoration: underline;">Privacy Policy</a>.
+            </label>
+          </div>
+          
+          <div id="registrationError" style="color: #dc3545; font-size: 14px; margin: 10px 0; display: none;"></div>
+          <button class="btn btn-accent" type="submit" style="width:100%" id="registerButton">Create Account</button>
         </form>
       </div>
     </div>
   </div>
 
+  <script src="apiService.js"></script>
   <script src="pmis_auth.js"></script>
+  <script>
+    // Initialize company swiper
+    function initializeCompanySwiper() {
+      const swiperWrapper = document.getElementById('companySwiper');
+      if (!swiperWrapper) return;
+      
+      const companies = ApiService.getCompanyLogos();
+      
+      // Create slides for companies (duplicate for seamless scroll)
+      const slidesHTML = companies.concat(companies).map(company => 
+        `<div class="swiper-slide">
+          <img src="${company.logo}" alt="${company.name}" class="company-logo" title="${company.name}">
+        </div>`
+      ).join('');
+      
+      swiperWrapper.innerHTML = slidesHTML;
+    }
+    
+    // Initialize swiper on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeCompanySwiper();
+    });
+  </script>
   <script>
     // Wire buttons → modals
     const open = id => document.getElementById(id).classList.add('open');
@@ -234,22 +459,107 @@
       e.preventDefault();
       const id = (document.getElementById('loginId').value||'').trim();
       const pw = (document.getElementById('loginPass').value||'').trim();
+      const loginButton = document.getElementById('loginButton');
+      const loginError = document.getElementById('loginError');
+      
+      // Clear previous errors
+      loginError.style.display = 'none';
+      loginButton.textContent = 'Logging in...';
+      loginButton.disabled = true;
+      
       PMISAuth.login(id, pw)
-        .then(() => window.location.href = 'pm_internship_portal.html')
-        .catch(err => alert(err.message));
+        .then(() => {
+          console.log('Login successful, redirecting...');
+          window.location.href = 'pm_internship_portal.html';
+        })
+        .catch(err => {
+          loginError.textContent = err.message;
+          loginError.style.display = 'block';
+          loginButton.textContent = 'Login';
+          loginButton.disabled = false;
+        });
     });
 
     document.getElementById('registerForm').addEventListener('submit', e => {
       e.preventDefault();
+      
+      // Validate password confirmation
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+      const registerButton = document.getElementById('registerButton');
+      const registerError = document.getElementById('registrationError');
+      
+      // Clear previous errors
+      registerError.style.display = 'none';
+      
+      if (password !== confirmPassword) {
+        registerError.textContent = 'Passwords do not match';
+        registerError.style.display = 'block';
+        return;
+      }
+      
+      // Check age eligibility (21-24 years)
+      const dob = new Date(document.getElementById('regDateOfBirth').value);
+      const today = new Date();
+      const age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000));
+      
+      if (age < 21 || age > 24) {
+        registerError.textContent = 'Age must be between 21-24 years to be eligible for PM Internship Scheme';
+        registerError.style.display = 'block';
+        return;
+      }
+      
       const payload = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        mobile: document.getElementById('mobile').value.trim(),
-        password: document.getElementById('password').value
+        name: document.getElementById('regName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        mobile: document.getElementById('regMobile').value.trim(),
+        password: password,
+        dateOfBirth: document.getElementById('regDateOfBirth').value,
+        gender: document.getElementById('regGender').value,
+        qualification: document.getElementById('regQualification').value,
+        course: document.getElementById('regCourse').value.trim(),
+        skills: document.getElementById('regSkills').value.trim(),
+        preferredLocation: document.getElementById('regPreferredLocation').value,
+        preferredIndustry: document.getElementById('regPreferredIndustry').value,
+        internshipType: document.getElementById('regInternshipType').value,
+        durationPreference: document.getElementById('regDurationPreference').value,
+        careerGoals: document.getElementById('regCareerGoals').value.trim()
       };
+      
+      registerButton.textContent = 'Creating Account...';
+      registerButton.disabled = true;
+      
       PMISAuth.register(payload)
-        .then(() => window.location.href = 'pm_internship_portal.html')
-        .catch(err => alert(err.message));
+        .then(() => {
+          console.log('Registration successful');
+          
+          // Show success message
+          document.getElementById('registerForm').style.display = 'none';
+          document.getElementById('registrationSuccess').style.display = 'block';
+          
+          // Auto-populate login form and redirect after delay
+          setTimeout(() => {
+            // Close registration modal
+            closeModal('registerModal');
+            
+            // Auto-populate login form
+            document.getElementById('loginId').value = payload.email;
+            document.getElementById('loginPass').value = payload.password;
+            
+            // Open login modal
+            setTimeout(() => {
+              open('loginModal');
+              // Focus on login button for easy access
+              document.getElementById('loginButton').focus();
+            }, 500);
+          }, 2000);
+        })
+        .catch(err => {
+          registerError.textContent = err.message;
+          registerError.style.display = 'block';
+          registerButton.textContent = 'Create Account';
+          registerButton.disabled = false;
+        });
     });
   </script>
 </body>

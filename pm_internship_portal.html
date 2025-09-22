@@ -69,6 +69,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            position: relative;
         }
 
         .notification-icon {
@@ -419,6 +420,348 @@
         .btn-block {
             width: 100%;
         }
+        
+        /* User Dropdown Styles */
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 5px);
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 220px;
+            z-index: 1000;
+        }
+        
+        .dropdown-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .dropdown-user-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .dropdown-user-email {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .dropdown-actions {
+            padding: 8px 0;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #dc3545;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Profile Form Styles */
+        .profile-header {
+            margin-bottom: 30px;
+        }
+        
+        .profile-section {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-section .section-title {
+            color: #2d4f93;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .profile-photo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .photo-upload {
+            display: inline-block;
+        }
+        
+        .photo-placeholder {
+            width: 120px;
+            height: 120px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+        }
+        
+        .photo-icon {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+        
+        .upload-btn {
+            background: #2d4f93;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .gender-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .gender-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .gender-btn:hover {
+            border-color: #2d4f93;
+        }
+        
+        .gender-btn.active {
+            background: #2d4f93;
+            color: white;
+            border-color: #2d4f93;
+        }
+        
+        .address-same-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .checkbox-label {
+            margin-right: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .profile-actions {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .profile-actions .btn {
+            margin: 0 10px;
+            min-width: 120px;
+        }
+        
+        /* Grievance Module Styles */
+        .grievance-header {
+            margin-bottom: 30px;
+        }
+        
+        .grievance-section {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .grievance-section .section-title {
+            color: #2d4f93;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .form-actions {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .form-actions .btn {
+            margin-right: 15px;
+            min-width: 120px;
+        }
+        
+        .text-muted {
+            color: #6c757d;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .grievance-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 32px;
+            font-weight: bold;
+            color: #2d4f93;
+            margin-bottom: 5px;
+        }
+        
+        .stat-number.pending {
+            color: #ff7a00;
+        }
+        
+        .stat-number.resolved {
+            color: #28a745;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .grievances-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .grievance-item {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+        }
+        
+        .grievance-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .grievance-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .grievance-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .grievance-meta {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .grievance-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .status-in-progress {
+            background: #cce5ff;
+            color: #004085;
+            border: 1px solid #99d3ff;
+        }
+        
+        .status-resolved {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-closed {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .grievance-description {
+            color: #666;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+        
+        .priority-high {
+            border-left: 4px solid #dc3545;
+        }
+        
+        .priority-urgent {
+            border-left: 4px solid #ff0000;
+            box-shadow: 0 2px 8px rgba(255, 0, 0, 0.1);
+        }
 
         /* Internships Section Styles */
         .internships-header {
@@ -751,6 +1094,73 @@
             justify-content: center;
             margin-top: 30px;
         }
+        
+        /* AI Match Score Styles */
+        .match-score {
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            border: 2px solid;
+            font-weight: 600;
+            min-width: 70px;
+        }
+        
+        .match-score.excellent {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        .match-score.good {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-color: #2196f3;
+            color: #1565c0;
+        }
+        
+        .match-score.fair {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-color: #ff9800;
+            color: #e65100;
+        }
+        
+        .match-score.basic {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            border-color: #9c27b0;
+            color: #6a1b9a;
+        }
+        
+        /* Type badge enhancements */
+        .type-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .type-badge.paid {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+        
+        .type-badge.unpaid {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #2196f3;
+        }
+        
+        /* Animation for row appearance */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -767,9 +1177,21 @@
             <div class="user-section">
                 <div class="notification-icon">🔔</div>
                 <div class="user-profile" onclick="toggleUserMenu()">
-                    <div class="user-avatar">W</div>
-                    <span>Welcome</span>
+                    <div class="user-avatar" id="userAvatar">W</div>
+                    <span id="userName">Welcome</span>
                     <span>▼</span>
+                </div>
+                <!-- User Dropdown Menu -->
+                <div id="userDropdown" class="user-dropdown">
+                    <div class="dropdown-header">
+                        <div class="dropdown-user-name" id="dropdownUserName">User Name</div>
+                        <div class="dropdown-user-email" id="dropdownUserEmail">user@example.com</div>
+                    </div>
+                    <div class="dropdown-actions">
+                        <button onclick="logout()" class="logout-btn">
+                            <span style="margin-right: 8px;">🚪</span>Logout
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -858,21 +1280,243 @@
 
             <!-- Profile Content (Hidden by default) -->
             <div id="profileContent" style="display: none;">
-                <h2>Candidate Profile</h2>
-                <p>Complete your profile to get personalized internship recommendations.</p>
-                <!-- Profile form will be added here -->
+                <div class="profile-header">
+                    <h2>Candidate Profile</h2>
+                    <p>Complete your profile to get personalized internship recommendations.</p>
+                </div>
+                
+                <!-- Personal Details Section -->
+                <div class="profile-section">
+                    <h3 class="section-title">Personal Details</h3>
+                    <form id="profileForm">
+                        <div class="profile-photo-section">
+                            <div class="photo-upload">
+                                <div class="photo-placeholder" id="photoPlaceholder">
+                                    <span class="photo-icon">📷</span>
+                                    <p>Upload Photo</p>
+                                </div>
+                                <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+                                <button type="button" onclick="document.getElementById('photoUpload').click()" class="upload-btn">Choose File</button>
+                                <small>Max size 500KB, jpg/png format</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Candidate Name *</label>
+                                <input type="text" id="candidateName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth *</label>
+                                <input type="date" id="dateOfBirth" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Gender *</label>
+                                <div class="gender-buttons">
+                                    <button type="button" class="gender-btn" data-gender="male">M</button>
+                                    <button type="button" class="gender-btn" data-gender="female">F</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Father / Mother / Guardian Name *</label>
+                                <input type="text" id="guardianName" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Category *</label>
+                                <select id="category" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option value="GENERAL">GENERAL</option>
+                                    <option value="SC">SC</option>
+                                    <option value="ST">ST</option>
+                                    <option value="OBC">OBC</option>
+                                    <option value="EWS">EWS</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mobile Number *</label>
+                                <input type="tel" id="mobileNumber" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" id="emailAddress" class="form-control" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Permanent Address Section -->
+                <div class="profile-section">
+                    <h3 class="section-title">Permanent Address</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">House / Apartment No. *</label>
+                            <input type="text" id="houseNo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address Line 1 *</label>
+                            <input type="text" id="addressLine1" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" id="addressLine2" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">State / UT *</label>
+                            <select id="state" class="form-control" required>
+                                <option value="">Select state / UT</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Telangana">Telangana</option>
+                                <!-- Add more states as needed -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">District *</label>
+                            <select id="district" class="form-control" required>
+                                <option value="">Select district</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Block</label>
+                            <input type="text" id="block" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Village</label>
+                            <input type="text" id="village" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Zip / Postal Code *</label>
+                            <input type="text" id="zipCode" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="address-same-section">
+                        <label class="checkbox-label">
+                            <input type="radio" name="addressSame" value="yes" checked> Yes
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="addressSame" value="no"> No
+                        </label>
+                        <span>Is your permanent address same as your current address?</span>
+                    </div>
+                </div>
+                
+                <!-- Current Address Section -->
+                <div class="profile-section" id="currentAddressSection" style="display: none;">
+                    <h3 class="section-title">Current Address</h3>
+                    <!-- Similar fields as permanent address -->
+                    <p style="color: #666; font-style: italic;">Fill this section if your current address is different from permanent address.</p>
+                </div>
+                
+                <!-- Education Details Section -->
+                <div class="profile-section">
+                    <h3 class="section-title">Education Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Highest Qualification *</label>
+                            <select id="qualification" class="form-control" required>
+                                <option value="">Select Qualification</option>
+                                <option value="10th">10th</option>
+                                <option value="12th">12th</option>
+                                <option value="Diploma">Diploma</option>
+                                <option value="Bachelor's">Bachelor's Degree</option>
+                                <option value="Master's">Master's Degree</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Course/Stream *</label>
+                            <input type="text" id="course" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Specialization</label>
+                            <input type="text" id="specialization" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Institution Name *</label>
+                            <input type="text" id="institution" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Year of Passing *</label>
+                            <select id="yearOfPassing" class="form-control" required>
+                                <option value="">Select Year</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Percentage/CGPA *</label>
+                            <input type="text" id="marks" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Skills & Preferences Section -->
+                <div class="profile-section">
+                    <h3 class="section-title">Skills & Preferences</h3>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label class="form-label">Skills (comma separated)</label>
+                            <input type="text" id="skills" class="form-control" placeholder="e.g., JavaScript, Python, Communication, Leadership">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Preferred Location</label>
+                            <input type="text" id="preferredLocation" class="form-control" placeholder="e.g., Bangalore, Mumbai">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Preferred Industry</label>
+                            <input type="text" id="preferredIndustry" class="form-control" placeholder="e.g., IT, Finance, Marketing">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="profile-actions">
+                    <button type="button" onclick="saveProfile()" class="btn btn-primary">Save Profile</button>
+                    <button type="button" onclick="resetProfile()" class="btn btn-secondary">Reset</button>
+                </div>
             </div>
 
             <!-- Internships Content (Hidden by default) -->
             <div id="internshipsContent" style="display: none;">
                 <div class="internships-header">
-                    <h2>View & Apply Internships</h2>
+                    <h2><i class="fas fa-brain" style="color: #4a90e2; margin-right: 10px;"></i>AI-Curated Internship Recommendations</h2>
                     <div class="info-note">
-                        <i>ℹ️</i> The internship choices selected by you are not taken in any order of preference.
+                        <i>🤖</i> These internships are personally selected for you by our AI engine based on your profile, skills, and preferences.
+                    </div>
+                    <div id="aiLoadingStatus" style="margin: 15px 0; padding: 12px; background: #e7f1ff; border-radius: 6px; display: none;">
+                        <i class="fas fa-spinner fa-spin" style="color: #4a90e2; margin-right: 8px;"></i>
+                        <span id="aiStatusText">Analyzing your profile for perfect matches...</span>
                     </div>
                     <div class="stats-summary">
                         <span><strong id="appliedCount">0</strong> applied</span>
                         <span><strong id="remainingCount">10</strong> remaining</span>
+                        <span id="aiMatchInfo" style="color: #8e44ad; font-weight: 600;"></span>
                     </div>
                 </div>
 
@@ -883,17 +1527,24 @@
                         <button onclick="applySearchFilter()" class="search-btn">🔍</button>
                     </div>
                     <div class="filters-row">
-                        <select id="stateFilter" class="filter-select" onchange="onStateChange()">
-                            <option value="">Select State</option>
+                        <select id="locationFilter" class="filter-select">
+                            <option value="">Filter by Location</option>
+                            <option value="Bangalore, Karnataka">Bangalore, Karnataka</option>
+                            <option value="Mumbai, Maharashtra">Mumbai, Maharashtra</option>
+                            <option value="New Delhi, Delhi">New Delhi, Delhi</option>
+                            <option value="Chennai, Tamil Nadu">Chennai, Tamil Nadu</option>
+                            <option value="Hyderabad, Telangana">Hyderabad, Telangana</option>
+                            <option value="Ahmedabad, Gujarat">Ahmedabad, Gujarat</option>
                         </select>
-                        <select id="districtFilter" class="filter-select">
-                            <option value="">Select District</option>
+                        <select id="typeFilter" class="filter-select">
+                            <option value="">Filter by Type</option>
+                            <option value="paid">Paid Internships</option>
+                            <option value="unpaid">Unpaid Internships</option>
                         </select>
-                        <select id="sectorFilter" class="filter-select">
-                            <option value="">Select Sector</option>
-                        </select>
-                        <select id="areaFilter" class="filter-select">
-                            <option value="">Select Field</option>
+                        <select id="topCompaniesFilter" class="filter-select">
+                            <option value="">Filter by Companies</option>
+                            <option value="true">Top Companies Only</option>
+                            <option value="false">All Companies</option>
                         </select>
                     </div>
                 </div>
@@ -905,13 +1556,13 @@
                             <tr>
                                 <th>SR.NO</th>
                                 <th>ACTION</th>
-                                <th>INTERNSHIP ID</th>
-                                <th>STATE / UT</th>
-                                <th>DISTRICT</th>
-                                <th>SECTOR</th>
-                                <th>AREA/FIELD</th>
-                                <th>NO OF OPPORTUNITIES</th>
-                                <th>NO. OF CANDIDATES ALREADY APPLIED</th>
+                                <th>INTERNSHIP TITLE</th>
+                                <th>COMPANY</th>
+                                <th>LOCATION</th>
+                                <th>TYPE</th>
+                                <th>SALARY</th>
+                                <th><i class="fas fa-percentage"></i> AI MATCH</th>
+                                <th>OPPORTUNITIES</th>
                             </tr>
                         </thead>
                         <tbody id="internshipTableBody">
@@ -924,6 +1575,103 @@
                 <div id="pagination" class="pagination"></div>
             </div>
 
+            <!-- Grievance Content (Hidden by default) -->
+            <div id="grievanceContent" style="display: none;">
+                <div class="grievance-header">
+                    <h2>Grievance / Feedback</h2>
+                    <p>Raise your concerns or provide feedback to help us improve the PM Internship Scheme.</p>
+                </div>
+                
+                <!-- Grievance Form -->
+                <div class="grievance-section">
+                    <h3 class="section-title">Submit New Grievance</h3>
+                    <form id="grievanceForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Category *</label>
+                                <select id="grievanceCategory" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option value="technical">Technical Issues</option>
+                                    <option value="application">Application Process</option>
+                                    <option value="internship">Internship Related</option>
+                                    <option value="payment">Payment/Stipend</option>
+                                    <option value="company">Company Issues</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Priority *</label>
+                                <select id="grievancePriority" class="form-control" required>
+                                    <option value="">Select Priority</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label class="form-label">Subject *</label>
+                                <input type="text" id="grievanceSubject" class="form-control" required placeholder="Brief description of your issue">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label class="form-label">Description *</label>
+                                <textarea id="grievanceDescription" class="form-textarea" required placeholder="Please provide detailed description of your issue or feedback..." rows="6"></textarea>
+                                <small class="text-muted">Please be as specific as possible to help us resolve your issue quickly.</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Related Internship ID (if applicable)</label>
+                                <input type="text" id="relatedInternshipId" class="form-control" placeholder="e.g., INT001">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contact Preference</label>
+                                <select id="contactPreference" class="form-control">
+                                    <option value="email">Email</option>
+                                    <option value="phone">Phone</option>
+                                    <option value="both">Both</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Grievance</button>
+                            <button type="button" onclick="resetGrievanceForm()" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- My Grievances -->
+                <div class="grievance-section">
+                    <h3 class="section-title">My Grievances</h3>
+                    <div class="grievance-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="totalGrievances">0</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number pending" id="pendingGrievances">0</span>
+                            <span class="stat-label">Pending</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number resolved" id="resolvedGrievances">0</span>
+                            <span class="stat-label">Resolved</span>
+                        </div>
+                    </div>
+                    
+                    <div id="grievancesList" class="grievances-list">
+                        <!-- Grievances will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
             <!-- Other content sections will be added similarly -->
         </main>
     </div>
@@ -962,7 +1710,11 @@
         </div>
     </footer>
 
-    <!-- Include Internships JavaScript -->
+    <!-- Include JavaScript files -->
+    <script src="apiService.js"></script>
+    <script src="dataProcessor.js"></script>
+    <script src="llmService.js"></script>
+    <script src="aiRecommendationEngine.js"></script>
     <script src="internships.js"></script>
 
     <!-- Internship Details Modal -->
@@ -1123,10 +1875,340 @@
     </div>
 
     <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+        });
+
+        function checkAuthentication() {
+            if (!PMISAuth.isLoggedIn()) {
+                alert('Please login to access the portal.');
+                window.location.href = 'landing_pm_internship.html';
+                return;
+            }
+            
+            // Display user information
+            const currentUser = PMISAuth.getCurrentUser();
+            if (currentUser) {
+                const userName = document.getElementById('userName');
+                const userAvatar = document.getElementById('userAvatar');
+                const dropdownUserName = document.getElementById('dropdownUserName');
+                const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+                
+                if (userName) userName.textContent = currentUser.name;
+                if (userAvatar) userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+                if (dropdownUserName) dropdownUserName.textContent = currentUser.name;
+                if (dropdownUserEmail) dropdownUserEmail.textContent = currentUser.email;
+            }
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                PMISAuth.logout().then(() => {
+                    console.log('User logged out successfully');
+                    window.location.href = 'landing_pm_internship.html';
+                }).catch(error => {
+                    console.error('Logout error:', error);
+                    window.location.href = 'landing_pm_internship.html';
+                });
+            }
+            // Close dropdown after action
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+
+        // Profile form functionality
+        function initializeProfileForm() {
+            // Initialize year dropdown
+            const yearSelect = document.getElementById('yearOfPassing');
+            if (yearSelect) {
+                const currentYear = new Date().getFullYear();
+                for (let year = currentYear; year >= currentYear - 10; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearSelect.appendChild(option);
+                }
+            }
+            
+            // Load user profile if exists
+            loadUserProfile();
+            
+            // Setup gender button functionality
+            setupGenderButtons();
+            
+            // Setup address same/different functionality
+            setupAddressToggle();
+        }
+        
+        function setupGenderButtons() {
+            const genderBtns = document.querySelectorAll('.gender-btn');
+            genderBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    genderBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+        
+        function setupAddressToggle() {
+            const addressRadios = document.querySelectorAll('input[name="addressSame"]');
+            const currentAddressSection = document.getElementById('currentAddressSection');
+            
+            addressRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'no') {
+                        currentAddressSection.style.display = 'block';
+                    } else {
+                        currentAddressSection.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        async function loadUserProfile() {
+            const currentUser = PMISAuth.getCurrentUser();
+            if (!currentUser) return;
+            
+            try {
+                const profile = await ApiService.getUserProfile(currentUser.id);
+                if (profile) {
+                    // Populate form with existing data
+                    populateProfileForm(profile);
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+        
+        function populateProfileForm(profile) {
+            // Populate basic fields
+            const fields = [
+                'candidateName', 'dateOfBirth', 'guardianName', 'category',
+                'mobileNumber', 'emailAddress', 'houseNo', 'addressLine1',
+                'addressLine2', 'state', 'district', 'block', 'village',
+                'zipCode', 'qualification', 'course', 'specialization',
+                'institution', 'yearOfPassing', 'marks', 'skills',
+                'preferredLocation', 'preferredIndustry'
+            ];
+            
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element && profile[field]) {
+                    element.value = profile[field];
+                }
+            });
+            
+            // Set gender
+            if (profile.gender) {
+                const genderBtn = document.querySelector(`[data-gender="${profile.gender}"]`);
+                if (genderBtn) {
+                    genderBtn.click();
+                }
+            }
+        }
+        
+        async function saveProfile() {
+            const currentUser = PMISAuth.getCurrentUser();
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+            
+            // Validate required fields
+            const requiredFields = [
+                'candidateName', 'dateOfBirth', 'guardianName', 'category',
+                'mobileNumber', 'emailAddress', 'houseNo', 'addressLine1',
+                'state', 'zipCode', 'qualification', 'course', 'institution',
+                'yearOfPassing', 'marks'
+            ];
+            
+            for (let field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element || !element.value.trim()) {
+                    alert(`Please fill in ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
+                    element.focus();
+                    return;
+                }
+            }
+            
+            // Check gender selection
+            const selectedGender = document.querySelector('.gender-btn.active');
+            if (!selectedGender) {
+                alert('Please select gender');
+                return;
+            }
+            
+            // Collect form data
+            const profileData = {
+                candidateName: document.getElementById('candidateName').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                gender: selectedGender.getAttribute('data-gender'),
+                guardianName: document.getElementById('guardianName').value,
+                category: document.getElementById('category').value,
+                mobileNumber: document.getElementById('mobileNumber').value,
+                emailAddress: document.getElementById('emailAddress').value,
+                houseNo: document.getElementById('houseNo').value,
+                addressLine1: document.getElementById('addressLine1').value,
+                addressLine2: document.getElementById('addressLine2').value,
+                state: document.getElementById('state').value,
+                district: document.getElementById('district').value,
+                block: document.getElementById('block').value,
+                village: document.getElementById('village').value,
+                zipCode: document.getElementById('zipCode').value,
+                qualification: document.getElementById('qualification').value,
+                course: document.getElementById('course').value,
+                specialization: document.getElementById('specialization').value,
+                institution: document.getElementById('institution').value,
+                yearOfPassing: document.getElementById('yearOfPassing').value,
+                marks: document.getElementById('marks').value,
+                skills: document.getElementById('skills').value,
+                preferredLocation: document.getElementById('preferredLocation').value,
+                preferredIndustry: document.getElementById('preferredIndustry').value
+            };
+            
+            try {
+                await ApiService.saveUserProfile(currentUser.id, profileData);
+                alert('Profile saved successfully!');
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                alert('Error saving profile: ' + error.message);
+            }
+        }
+        
+        function resetProfile() {
+            if (confirm('Are you sure you want to reset the form? All unsaved changes will be lost.')) {
+                document.getElementById('profileForm').reset();
+                document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('currentAddressSection').style.display = 'none';
+                document.querySelector('input[name="addressSame"][value="yes"]').checked = true;
+            }
+        }
+        
+        // Grievance functionality
+        function initializeGrievanceModule() {
+            loadUserGrievances();
+            setupGrievanceForm();
+        }
+        
+        function setupGrievanceForm() {
+            const form = document.getElementById('grievanceForm');
+            if (form) {
+                form.addEventListener('submit', handleGrievanceSubmit);
+            }
+        }
+        
+        async function handleGrievanceSubmit(event) {
+            event.preventDefault();
+            
+            const currentUser = PMISAuth.getCurrentUser();
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+            
+            const formData = {
+                category: document.getElementById('grievanceCategory').value,
+                priority: document.getElementById('grievancePriority').value,
+                subject: document.getElementById('grievanceSubject').value,
+                description: document.getElementById('grievanceDescription').value,
+                related_internship_id: document.getElementById('relatedInternshipId').value,
+                contact_preference: document.getElementById('contactPreference').value
+            };
+            
+            try {
+                await ApiService.submitGrievance(currentUser.id, formData);
+                alert('Grievance submitted successfully! You will receive updates on the resolution progress.');
+                document.getElementById('grievanceForm').reset();
+                loadUserGrievances();
+            } catch (error) {
+                console.error('Error submitting grievance:', error);
+                alert('Error submitting grievance: ' + error.message);
+            }
+        }
+        
+        async function loadUserGrievances() {
+            const currentUser = PMISAuth.getCurrentUser();
+            if (!currentUser) return;
+            
+            try {
+                const grievances = await ApiService.getUserGrievances(currentUser.id);
+                displayGrievances(grievances);
+                updateGrievanceStats(grievances);
+            } catch (error) {
+                console.error('Error loading grievances:', error);
+            }
+        }
+        
+        function displayGrievances(grievances) {
+            const grievancesList = document.getElementById('grievancesList');
+            if (!grievancesList) return;
+            
+            if (grievances.length === 0) {
+                grievancesList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <p>No grievances submitted yet.</p>
+                        <p><small>If you face any issues, please submit a grievance using the form above.</small></p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const grievancesHtml = grievances.map(grievance => {
+                const statusClass = `status-${grievance.status}`;
+                const priorityClass = grievance.priority === 'high' || grievance.priority === 'urgent' 
+                    ? `priority-${grievance.priority}` : '';
+                    
+                return `
+                    <div class="grievance-item ${priorityClass}">
+                        <div class="grievance-header-info">
+                            <div>
+                                <div class="grievance-title">${grievance.subject}</div>
+                                <div class="grievance-meta">
+                                    Category: ${grievance.category.charAt(0).toUpperCase() + grievance.category.slice(1)} | 
+                                    Priority: ${grievance.priority.toUpperCase()} | 
+                                    Submitted: ${new Date(grievance.created_at).toLocaleDateString()}
+                                </div>
+                            </div>
+                            <span class="grievance-status ${statusClass}">${grievance.status}</span>
+                        </div>
+                        <div class="grievance-description">${grievance.description}</div>
+                        ${grievance.related_internship_id ? `<div class="grievance-meta" style="margin-top: 10px;">Related to: ${grievance.related_internship_id}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            grievancesList.innerHTML = grievancesHtml;
+        }
+        
+        function updateGrievanceStats(grievances) {
+            const total = grievances.length;
+            const pending = grievances.filter(g => g.status === 'pending' || g.status === 'in-progress').length;
+            const resolved = grievances.filter(g => g.status === 'resolved' || g.status === 'closed').length;
+            
+            const totalEl = document.getElementById('totalGrievances');
+            const pendingEl = document.getElementById('pendingGrievances');
+            const resolvedEl = document.getElementById('resolvedGrievances');
+            
+            if (totalEl) totalEl.textContent = total;
+            if (pendingEl) pendingEl.textContent = pending;
+            if (resolvedEl) resolvedEl.textContent = resolved;
+        }
+        
+        function resetGrievanceForm() {
+            if (confirm('Are you sure you want to reset the form?')) {
+                document.getElementById('grievanceForm').reset();
+            }
+        }
+        
+        // Global variables for AI integration
+        let aiRecommendationEngine;
+        let personalizedRecommendations = [];
+        
         // Navigation functionality
         function showContent(contentType) {
             // Hide all content sections
-            const contents = ['dashboardContent', 'profileContent', 'internshipsContent'];
+            const contents = ['dashboardContent', 'profileContent', 'internshipsContent', 'grievanceContent'];
             contents.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) element.style.display = 'none';
@@ -1137,9 +2219,13 @@
             if (targetContent) {
                 targetContent.style.display = 'block';
                 
-                // Initialize internships page if showing internships
+                // Initialize specific pages
                 if (contentType === 'internships') {
-                    initializeInternshipsPage();
+                    initializeInternshipsPageWithAI();
+                } else if (contentType === 'profile') {
+                    initializeProfileForm();
+                } else if (contentType === 'grievance') {
+                    initializeGrievanceModule();
                 }
             }
 
@@ -1148,6 +2234,253 @@
                 item.classList.remove('active');
             });
             event.target.classList.add('active');
+        }
+        
+        // Initialize AI-powered internships page
+        async function initializeInternshipsPageWithAI() {
+            const currentUser = PMISAuth.getCurrentUser();
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+            
+            showAIStatus('Initializing AI recommendation engine...', 'loading');
+            
+            try {
+                // Initialize AI engine if not already done
+                if (!aiRecommendationEngine) {
+                    aiRecommendationEngine = new AIRecommendationEngine();
+                    await aiRecommendationEngine.initialize();
+                }
+                
+                showAIStatus('Generating personalized recommendations...', 'processing');
+                await loadPersonalizedRecommendations();
+                
+            } catch (error) {
+                console.error('Error initializing AI internships:', error);
+                showAIStatus('AI temporarily unavailable - showing curated matches', 'fallback');
+                await loadFallbackRecommendations();
+            }
+        }
+        
+        function showAIStatus(message, type = 'loading') {
+            const statusDiv = document.getElementById('aiLoadingStatus');
+            const textSpan = document.getElementById('aiStatusText');
+            const icon = statusDiv.querySelector('i');
+            
+            statusDiv.style.display = 'block';
+            textSpan.textContent = message;
+            
+            // Update styling based on status type
+            switch(type) {
+                case 'loading':
+                    icon.className = 'fas fa-spinner fa-spin';
+                    statusDiv.style.background = '#e7f1ff';
+                    statusDiv.style.color = '#2d4f93';
+                    break;
+                case 'processing':
+                    icon.className = 'fas fa-brain';
+                    statusDiv.style.background = '#f3e5f5';
+                    statusDiv.style.color = '#8e44ad';
+                    break;
+                case 'success':
+                    icon.className = 'fas fa-check-circle';
+                    statusDiv.style.background = '#e8f5e8';
+                    statusDiv.style.color = '#27ae60';
+                    break;
+                case 'fallback':
+                    icon.className = 'fas fa-exclamation-triangle';
+                    statusDiv.style.background = '#fff8e1';
+                    statusDiv.style.color = '#f57c00';
+                    break;
+            }
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        // Load AI-generated personalized recommendations
+        async function loadPersonalizedRecommendations() {
+            const currentUser = PMISAuth.getCurrentUser();
+            
+            // Build comprehensive user profile for AI matching
+            const userProfile = {
+                name: currentUser.name,
+                email: currentUser.email,
+                qualification: currentUser.qualification || 'Bachelor\'s Degree',
+                course: currentUser.course || 'General',
+                skills: currentUser.skills || '',
+                preferredLocation: currentUser.preferredLocation || 'Any',
+                preferredIndustry: currentUser.preferredIndustry || 'Open to all',
+                internshipType: currentUser.internshipType || 'any',
+                durationPreference: currentUser.durationPreference || 'any',
+                careerGoals: currentUser.careerGoals || ''
+            };
+            
+            personalizedRecommendations = await aiRecommendationEngine.getPersonalizedRecommendations(userProfile);
+            
+            if (personalizedRecommendations && personalizedRecommendations.length > 0) {
+                showAIStatus(`Found ${personalizedRecommendations.length} perfect matches for you!`, 'success');
+                
+                // Update AI match info
+                const aiMatchInfo = document.getElementById('aiMatchInfo');
+                if (aiMatchInfo) {
+                    aiMatchInfo.textContent = `🎯 ${personalizedRecommendations.length} AI-curated matches`;
+                }
+                
+                displayAIRecommendations(personalizedRecommendations);
+            } else {
+                throw new Error('No recommendations generated');
+            }
+        }
+        
+        // Display AI recommendations in the table
+        function displayAIRecommendations(recommendations) {
+            const tbody = document.getElementById('internshipTableBody');
+            tbody.innerHTML = '';
+            
+            if (!recommendations || recommendations.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 40px; color: #666;">
+                            <i class="fas fa-search" style="font-size: 2em; margin-bottom: 10px; display: block;"></i>
+                            No personalized recommendations available. Try updating your profile with more details.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            recommendations.forEach((internship, index) => {
+                const row = document.createElement('tr');
+                const matchScore = Math.round(internship.matchingScore || internship.score || 75);
+                const scoreClass = matchScore >= 90 ? 'excellent' : matchScore >= 80 ? 'good' : matchScore >= 70 ? 'fair' : 'basic';
+                const isPaid = (internship.paid_unpaid || internship.type || 'Paid').toLowerCase() === 'paid';
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>
+                        <button class="btn-view" onclick="viewInternshipDetails(${index})" title="View Details">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                        <button class="btn-apply" onclick="applyForInternshipAI(${index})" title="Apply Now">
+                            <i class="fas fa-paper-plane"></i> Apply
+                        </button>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600; margin-bottom: 4px;">
+                            ${internship.internship_title || internship.title || 'N/A'}
+                        </div>
+                        ${internship.aiReason ? `<small style="color: #8e44ad; font-style: italic;"><i class="fas fa-lightbulb"></i> ${internship.aiReason}</small>` : ''}
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">${internship.organization_name || internship.company || 'N/A'}</div>
+                        ${internship.sector ? `<small style="color: #4a90e2;">${internship.sector}</small>` : ''}
+                    </td>
+                    <td>${internship.internship_location || internship.location || 'Remote'}</td>
+                    <td>
+                        <span class="type-badge ${isPaid ? 'paid' : 'unpaid'}">
+                            ${isPaid ? 'Paid' : 'Unpaid'}
+                        </span>
+                    </td>
+                    <td>${isPaid ? '₹10,000-25,000' : 'Certificate + Experience'}</td>
+                    <td>
+                        <div class="match-score ${scoreClass}" title="AI compatibility score">
+                            <span style="font-weight: 600;">${matchScore}%</span>
+                            <div style="font-size: 10px; margin-top: 2px;">AI Match</div>
+                        </div>
+                    </td>
+                    <td>${internship.no_of_opportunity || internship.opportunities || '5-10'}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Enhanced apply function with AI context
+        function applyForInternshipAI(index) {
+            const internship = personalizedRecommendations[index];
+            if (!internship) return;
+            
+            const title = internship.internship_title || internship.title || 'Internship';
+            const company = internship.organization_name || internship.company || 'Company';
+            const aiReason = internship.aiReason || 'Great match for your profile';
+            
+            const confirmMessage = `🚀 Apply for ${title} at ${company}?\n\n💡 AI Insight: ${aiReason}\n\nThis internship scored ${Math.round(internship.matchingScore || 85)}% compatibility with your profile.`;
+            
+            if (confirm(confirmMessage)) {
+                // Simulate application process with enhanced feedback
+                const button = event.target.closest('button');
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Applying...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    alert(`✅ Application submitted successfully!\n\n📋 Applied for: ${title}\n🏢 Company: ${company}\n🎯 Your AI match score: ${Math.round(internship.matchingScore || 85)}%\n\n📧 Confirmation email sent\n⏰ Expect response in 3-5 business days\n\nBest of luck! 🍀`);
+                    
+                    button.innerHTML = '<i class="fas fa-check"></i> Applied';
+                    button.style.background = '#27ae60';
+                    
+                    // Update applied count
+                    const appliedCount = document.getElementById('appliedCount');
+                    const remainingCount = document.getElementById('remainingCount');
+                    if (appliedCount && remainingCount) {
+                        const current = parseInt(appliedCount.textContent) || 0;
+                        const remaining = parseInt(remainingCount.textContent) || 10;
+                        
+                        appliedCount.textContent = current + 1;
+                        remainingCount.textContent = Math.max(0, remaining - 1);
+                    }
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.disabled = false;
+                        button.style.background = '';
+                    }, 3000);
+                }, 1500);
+            }
+        }
+        
+        // Fallback recommendations if AI fails
+        async function loadFallbackRecommendations() {
+            const fallbackInternships = [
+                {
+                    internship_title: 'Software Development Intern',
+                    organization_name: 'TechCorp Solutions',
+                    internship_location: 'Bangalore, Karnataka',
+                    paid_unpaid: 'Paid',
+                    sector: 'Information Technology',
+                    matchingScore: 85,
+                    aiReason: 'Matches your technical background',
+                    no_of_opportunity: '8'
+                },
+                {
+                    internship_title: 'Marketing Research Intern',
+                    organization_name: 'MarketPro Analytics',
+                    internship_location: 'Mumbai, Maharashtra',
+                    paid_unpaid: 'Paid',
+                    sector: 'Marketing & Sales',
+                    matchingScore: 78,
+                    aiReason: 'Good fit for analytical skills',
+                    no_of_opportunity: '5'
+                },
+                {
+                    internship_title: 'Finance Assistant Intern',
+                    organization_name: 'MoneyMatters Ltd',
+                    internship_location: 'Chennai, Tamil Nadu',
+                    paid_unpaid: 'Paid',
+                    sector: 'Banking & Finance',
+                    matchingScore: 92,
+                    aiReason: 'Excellent match for finance interest',
+                    no_of_opportunity: '3'
+                }
+            ];
+            
+            personalizedRecommendations = fallbackInternships;
+            displayAIRecommendations(personalizedRecommendations);
         }
 
         // Modal functionality
@@ -1159,10 +2492,35 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        function toggleUserMenu() {
-            // User menu functionality to be implemented
-            showLoginModal();
+        function toggleUserMenu(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            const isVisible = dropdown.style.display === 'block';
+            dropdown.style.display = isVisible ? 'none' : 'block';
         }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userProfile = document.querySelector('.user-profile');
+            const dropdown = document.getElementById('userDropdown');
+            
+            if (userProfile && dropdown) {
+                // If click is outside both user profile and dropdown, close dropdown
+                if (!userProfile.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            }
+        });
+        
+        // Prevent dropdown from closing when clicking inside it
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            }
+        });
 
         // Close modal when clicking outside
         window.onclick = function(event) {
@@ -1192,66 +2550,36 @@
         }
 
         function populateFilters() {
-            // Populate state filter
-            const stateFilter = document.getElementById('stateFilter');
-            const states = internshipManager.getUniqueStates();
-            stateFilter.innerHTML = '<option value="">Select State</option>';
-            states.forEach(state => {
-                stateFilter.innerHTML += `<option value="${state}">${state}</option>`;
-            });
-
-            // Populate sector filter
-            const sectorFilter = document.getElementById('sectorFilter');
-            const sectors = internshipManager.getUniqueSectors();
-            sectorFilter.innerHTML = '<option value="">Select Sector</option>';
-            sectors.forEach(sector => {
-                sectorFilter.innerHTML += `<option value="${sector}">${sector}</option>`;
-            });
-
-            // Populate area filter
-            const areaFilter = document.getElementById('areaFilter');
-            const areas = internshipManager.getUniqueAreas();
-            areaFilter.innerHTML = '<option value="">Select Field</option>';
-            areas.forEach(area => {
-                areaFilter.innerHTML += `<option value="${area}">${area}</option>`;
-            });
+            // Filters are now static HTML, no need to populate dynamically
+            console.log('Filters are pre-populated in HTML');
         }
 
+        // This function is no longer needed with the new filter system
         function onStateChange() {
-            const selectedState = document.getElementById('stateFilter').value;
-            const districtFilter = document.getElementById('districtFilter');
-            const districts = internshipManager.getUniqueDistricts(selectedState);
-            
-            districtFilter.innerHTML = '<option value="">Select District</option>';
-            districts.forEach(district => {
-                districtFilter.innerHTML += `<option value="${district}">${district}</option>`;
-            });
-            
-            applyFilters();
+            // Legacy function - filters are now applied directly
         }
 
         function applySearchFilter() {
             applyFilters();
         }
 
-        function applyFilters() {
+        async function applyFilters() {
             const filters = {
-                state: document.getElementById('stateFilter').value,
-                district: document.getElementById('districtFilter').value,
-                sector: document.getElementById('sectorFilter').value,
-                area: document.getElementById('areaFilter').value,
+                location: document.getElementById('locationFilter').value,
+                type: document.getElementById('typeFilter').value,
+                top_companies: document.getElementById('topCompaniesFilter').value,
                 search: document.getElementById('searchInput').value
             };
             
-            internshipManager.applyFilters(filters);
+            await internshipManager.applyFilters(filters);
         }
 
         // Add event listeners for filters
         document.addEventListener('DOMContentLoaded', function() {
-            const filterElements = ['stateFilter', 'districtFilter', 'sectorFilter', 'areaFilter'];
+            const filterElements = ['locationFilter', 'typeFilter', 'topCompaniesFilter'];
             filterElements.forEach(id => {
                 const element = document.getElementById(id);
-                if (element && id !== 'stateFilter') {
+                if (element) {
                     element.addEventListener('change', applyFilters);
                 }
             });
