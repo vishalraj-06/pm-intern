@@ -4,9 +4,9 @@
 const ApiService = {
     // Configuration
     config: {
-        baseUrl: 'YOUR_SUPABASE_URL', // Replace with your Supabase URL
-        apiKey: 'YOUR_SUPABASE_ANON_KEY', // Replace with your Supabase anon key
-        isDevelopment: true // Set to false in production
+        baseUrl: 'https://ntuufkpnneqszfyzyzyv.supabase.co', // Replace with your Supabase URL
+        apiKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50dXVma3BubmVxc3pmeXp5enl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1Nzc0OTAsImV4cCI6MjA3NDE1MzQ5MH0.MLmMu2KNZz8s1E81bFYgXqCkYQJyDz1Vt0XhlQgmvl8', // Replace with your Supabase anon key
+        isDevelopment: false // Set to false in production
     },
 
     // Development mode - uses local data

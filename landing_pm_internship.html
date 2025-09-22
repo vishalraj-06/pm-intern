@@ -99,6 +99,10 @@
     input,select{width:100%;padding:10px 12px;border:1px solid #d7dbe8;border-radius:8px;font-size:14px}
     .row{display:flex;gap:10px}
 
+    /* Scrollable Registration Modal */
+    .modal-card.scrollable{max-height:80vh;overflow-y:auto}
+    .modal-card.scrollable .modal-body{padding:16px 24px 24px}
+
     @media (max-width:900px){
       .hero .wrap{grid-template-columns:1fr}
       .two-col{grid-template-columns:1fr}
@@ -257,7 +261,7 @@
 
   <!-- Registration Modal -->
   <div class="modal" id="registerModal">
-    <div class="modal-card" style="max-width: 600px;">
+    <div class="modal-card scrollable" style="max-width: 600px;">
       <div class="modal-head">Youth Registration <button class="btn btn-outline" onclick="closeModal('registerModal')">✕</button></div>
       <div class="modal-body">
         <!-- Registration Success Message -->

@@ -1,10 +1,10 @@
 // LLM Integration Service for AI-Powered Internship Recommendations
-// Connects to local LLM (Ollama/LM Studio) running on localhost
+// Connects to local LLM (text-generation-webui with OpenAI extension) running on localhost:5000
 
 const LLMService = {
     config: {
-        baseUrl: 'http://localhost:11434', // Default Ollama endpoint
-        model: 'llama2', // Default model - can be changed to your preferred model
+        baseUrl: 'http://127.0.0.1:5000/v1', // OpenAI-compatible endpoint
+        model: 'TheBloke_Mistral-7B-Instruct-v0.1-GPTQ', // Loaded model from webui
         maxTokens: 2000,
         temperature: 0.3, // Lower temperature for more focused recommendations
         timeout: 30000 // 30 second timeout
@@ -13,7 +13,7 @@ const LLMService = {
     // Test connection to local LLM
     async testConnection() {
         try {
-            const response = await fetch(`${this.config.baseUrl}/api/tags`, {
+            const response = await fetch(`${this.config.baseUrl}/models`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ const LLMService = {
             
             if (response.ok) {
                 const data = await response.json();
-                console.log('LLM Connection successful. Available models:', data.models?.map(m => m.name) || []);
+                console.log('LLM Connection successful. Available models:', data.data?.map(m => m.id) || []);
                 return true;
             }
             return false;
@@ -41,21 +41,18 @@ const LLMService = {
             // Create a focused prompt for the LLM
             const prompt = this.createRecommendationPrompt(userProfile, internshipData, options);
             
-            const response = await fetch(`${this.config.baseUrl}/api/generate`, {
+            const response = await fetch(`${this.config.baseUrl}/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     model: this.config.model,
-                    prompt: prompt,
-                    stream: false,
-                    options: {
-                        temperature: this.config.temperature,
-                        num_predict: this.config.maxTokens,
-                        top_p: 0.9,
-                        repeat_penalty: 1.1
-                    }
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature: this.config.temperature,
+                    max_tokens: this.config.maxTokens,
+                    top_p: 0.9,
+                    frequency_penalty: 0.1 // Approximate repeat_penalty
                 }),
                 signal: AbortSignal.timeout(this.config.timeout)
             });
@@ -65,7 +62,7 @@ const LLMService = {
             }
 
             const result = await response.json();
-            return this.parseRecommendationResponse(result.response, internshipData);
+            return this.parseRecommendationResponse(result.choices[0].message.content, internshipData);
 
         } catch (error) {
             console.error('AI recommendation generation failed:', error);
@@ -98,7 +95,7 @@ FAIRNESS CONSTRAINTS:
 - Do not recommend oversubscribed internships: If remaining_slots are low (<20% of total), apply a penalty.
 ` : '';
 
-        return `You are an AI career counselor specializing in internship recommendations for Indian students.
+        return `<s>[INST] You are an AI career counselor specializing in internship recommendations for Indian students.
 
 ${userContext}
 
@@ -130,7 +127,7 @@ Provide response in this EXACT JSON format:
   ]
 }
 
-Ensure internship_index corresponds to the number in the list above. Provide exactly 10 recommendations, ranked from best (1) to good (10).`;
+Ensure internship_index corresponds to the number in the list above. Provide exactly 10 recommendations, ranked from best (1) to good (10). [/INST]</s>`;
     },
 
     // Parse LLM response and match with internship data
@@ -270,26 +267,23 @@ Recommended Internship: ${recommendation['Job Title']} at ${recommendation['Comp
 
 Provide a brief, friendly explanation (2-3 sentences) of why this internship is a good match for this user. Focus on practical benefits and career relevance.`;
 
-            const response = await fetch(`${this.config.baseUrl}/api/generate`, {
+            const response = await fetch(`${this.config.baseUrl}/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     model: this.config.model,
-                    prompt: prompt,
-                    stream: false,
-                    options: {
-                        temperature: 0.7,
-                        num_predict: 150
-                    }
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature: 0.7,
+                    max_tokens: 150
                 }),
                 signal: AbortSignal.timeout(10000)
             });
 
             if (response.ok) {
                 const result = await response.json();
-                return result.response.trim();
+                return result.choices[0].message.content.trim();
             }
             
         } catch (error) {
@@ -302,10 +296,10 @@ Provide a brief, friendly explanation (2-3 sentences) of why this internship is 
     // Get available models from local LLM
     async getAvailableModels() {
         try {
-            const response = await fetch(`${this.config.baseUrl}/api/tags`);
+            const response = await fetch(`${this.config.baseUrl}/models`);
             if (response.ok) {
                 const data = await response.json();
-                return data.models || [];
+                return data.data || [];
             }
         } catch (error) {
             console.error('Failed to get available models:', error);
