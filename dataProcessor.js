@@ -28,7 +28,9 @@ const DataProcessor = {
         } catch (error) {
             console.error('Failed to load CSV data:', error);
             // Return sample data for development
-            return this.getSampleData();
+            const sample = this.getSampleData();
+            this.internshipData = sample;
+            return sample;
         }
     },
 

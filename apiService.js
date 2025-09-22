@@ -42,6 +42,7 @@ const ApiService = {
                 state: 'Karnataka',
                 district: 'Bangalore Urban',
                 opportunities: 25,
+                remaining_slots: 20,
                 description: 'Work on web applications using modern technologies',
                 qualifications: 'Bachelor of Technology',
                 course: 'Computer Science Engineering',
@@ -65,6 +66,7 @@ const ApiService = {
                 state: 'Maharashtra',
                 district: 'Mumbai',
                 opportunities: 15,
+                remaining_slots: 12,
                 description: 'Assist in digital marketing campaigns and social media management',
                 qualifications: 'Bachelor of Business Administration',
                 course: 'Marketing',
@@ -88,6 +90,7 @@ const ApiService = {
                 state: 'Delhi',
                 district: 'New Delhi',
                 opportunities: 10,
+                remaining_slots: 3,
                 description: 'Support financial analysis and reporting activities',
                 qualifications: 'Bachelor of Commerce',
                 course: 'Finance',
@@ -270,6 +273,18 @@ const ApiService = {
                 i.sector.toLowerCase().includes(searchTerm)
             );
         }
+
+        // Capacity filter: keep internships with remaining slots > 0 if field exists
+        internships = internships.filter(i => (typeof i.remaining_slots === 'number' ? i.remaining_slots > 0 : true));
+
+        // Sort by remaining capacity desc, then by top company, then by opportunities desc
+        internships.sort((a, b) => {
+            const ra = typeof a.remaining_slots === 'number' ? a.remaining_slots : a.opportunities || 0;
+            const rb = typeof b.remaining_slots === 'number' ? b.remaining_slots : b.opportunities || 0;
+            if (rb !== ra) return rb - ra;
+            if (!!b.is_top_company !== !!a.is_top_company) return (b.is_top_company ? 1 : 0) - (a.is_top_company ? 1 : 0);
+            return (b.opportunities || 0) - (a.opportunities || 0);
+        });
         
         return internships;
     },
@@ -298,6 +313,13 @@ const ApiService = {
     async getUserApplications(userId) {
         const applications = await this.apiCall('applications');
         return applications.filter(app => app.user_id === userId);
+    },
+
+    // Participation count helper (dev mode only; in prod use Supabase view or RPC)
+    async getParticipationCount(userId) {
+        const applications = await this.getUserApplications(userId);
+        // In real setup, completed status would come from backend; assume all are active here
+        return applications.length;
     },
 
     async withdrawApplication(applicationId) {
@@ -333,7 +355,24 @@ const ApiService = {
 
     async getUserProfile(userId) {
         const profiles = await this.apiCall('user_profiles');
-        return profiles.find(p => p.user_id === userId);
+        const raw = profiles.find(p => p.user_id === userId);
+        if (!raw) return undefined;
+        // Normalize snake_case to camelCase for UI compatibility
+        const normalized = {
+            ...raw,
+            candidateName: raw.candidate_name || raw.candidateName,
+            guardianName: raw.guardian_name || raw.guardianName,
+            mobileNumber: raw.mobile_number || raw.mobileNumber,
+            emailAddress: raw.email_address || raw.emailAddress,
+            houseNo: raw.house_no || raw.houseNo,
+            addressLine1: raw.address_line1 || raw.addressLine1,
+            addressLine2: raw.address_line2 || raw.addressLine2,
+            zipCode: raw.zip_code || raw.zipCode,
+            preferredLocation: raw.preferred_location || raw.preferredLocation,
+            preferredIndustry: raw.preferred_industry || raw.preferredIndustry,
+            yearOfPassing: raw.year_of_passing || raw.yearOfPassing
+        };
+        return normalized;
     },
 
     // Grievance methods

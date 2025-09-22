@@ -1715,6 +1715,7 @@
     <script src="dataProcessor.js"></script>
     <script src="llmService.js"></script>
     <script src="aiRecommendationEngine.js"></script>
+    <script src="pmis_auth.js"></script>
     <script src="internships.js"></script>
 
     <!-- Internship Details Modal -->
@@ -1968,13 +1969,22 @@
         
         async function loadUserProfile() {
             const currentUser = PMISAuth.getCurrentUser();
-            if (!currentUser) return;
+            if (!currentUser) {
+                console.log('No current user found');
+                return;
+            }
+            
+            console.log('Loading profile for user:', currentUser.id);
             
             try {
                 const profile = await ApiService.getUserProfile(currentUser.id);
+                console.log('Retrieved profile:', profile);
                 if (profile) {
                     // Populate form with existing data
                     populateProfileForm(profile);
+                    console.log('Profile form populated');
+                } else {
+                    console.log('No profile found for user');
                 }
             } catch (error) {
                 console.error('Error loading profile:', error);
@@ -2247,11 +2257,11 @@
             showAIStatus('Initializing AI recommendation engine...', 'loading');
             
             try {
-                // Initialize AI engine if not already done
+                // Initialize AI engine if not already done (singleton on window)
                 if (!aiRecommendationEngine) {
-                    aiRecommendationEngine = new AIRecommendationEngine();
-                    await aiRecommendationEngine.initialize();
+                    aiRecommendationEngine = window.AIRecommendationEngine;
                 }
+                await aiRecommendationEngine.initialize();
                 
                 showAIStatus('Generating personalized recommendations...', 'processing');
                 await loadPersonalizedRecommendations();
@@ -2305,23 +2315,42 @@
         // Load AI-generated personalized recommendations
         async function loadPersonalizedRecommendations() {
             const currentUser = PMISAuth.getCurrentUser();
-            
-            // Build comprehensive user profile for AI matching
+            if (!currentUser) throw new Error('No current user');
+
+            // Fetch the saved profile (from registration or profile form)
+            let profile = await ApiService.getUserProfile(currentUser.id);
+            if (!profile) {
+                // Fallback to minimal profile from session
+                profile = {
+                    candidateName: currentUser.name,
+                    email: currentUser.email,
+                    qualification: 'Bachelor\'s Degree',
+                    course: 'General',
+                    skills: '',
+                    preferredLocation: 'Any',
+                    preferredIndustry: 'Open to all'
+                };
+            }
+
+            // Normalize keys expected by AI engine
             const userProfile = {
-                name: currentUser.name,
-                email: currentUser.email,
-                qualification: currentUser.qualification || 'Bachelor\'s Degree',
-                course: currentUser.course || 'General',
-                skills: currentUser.skills || '',
-                preferredLocation: currentUser.preferredLocation || 'Any',
-                preferredIndustry: currentUser.preferredIndustry || 'Open to all',
-                internshipType: currentUser.internshipType || 'any',
-                durationPreference: currentUser.durationPreference || 'any',
-                careerGoals: currentUser.careerGoals || ''
+                candidateName: profile.candidateName || profile.name || currentUser.name,
+                name: profile.candidateName || profile.name || currentUser.name,
+                email: profile.emailAddress || profile.email || currentUser.email,
+                qualification: profile.qualification || '',
+                course: profile.course || '',
+                skills: profile.skills || '',
+                preferredLocation: profile.preferredLocation || 'Any',
+                preferredIndustry: profile.preferredIndustry || 'Open to all',
+                state: profile.state || '',
+                internshipType: profile.internshipType || 'any',
+                durationPreference: profile.durationPreference || 'any',
+                careerGoals: profile.career_goals || profile.careerGoals || ''
             };
-            
-            personalizedRecommendations = await aiRecommendationEngine.getPersonalizedRecommendations(userProfile);
-            
+
+            // Generate recommendations
+            personalizedRecommendations = await aiRecommendationEngine.generateRecommendations(userProfile);
+
             if (personalizedRecommendations && personalizedRecommendations.length > 0) {
                 showAIStatus(`Found ${personalizedRecommendations.length} perfect matches for you!`, 'success');
                 
@@ -2337,7 +2366,7 @@
             }
         }
         
-        // Display AI recommendations in the table
+        // Display AI recommendations in the table using legacy columns
         function displayAIRecommendations(recommendations) {
             const tbody = document.getElementById('internshipTableBody');
             tbody.innerHTML = '';
@@ -2354,48 +2383,39 @@
                 return;
             }
             
-            recommendations.forEach((internship, index) => {
+            recommendations.forEach((rec, index) => {
                 const row = document.createElement('tr');
-                const matchScore = Math.round(internship.matchingScore || internship.score || 75);
+                const legacy = rec.converted_format || {};
+                const title = legacy.role || rec['Job Title'] || 'N/A';
+                const company = legacy.company || rec['Company Name'] || 'N/A';
+                const location = legacy.location || rec.location || 'N/A';
+                const type = legacy.type || (rec.isPaid ? 'paid' : 'unpaid');
+                const salary = legacy.salary || rec['Stipend'] || 'N/A';
+                const opportunities = legacy.opportunities || parseInt(rec['Numer of Openings']) || 1;
+                const matchScore = Math.round(rec.ai_match_score || rec.compatibility_score || 75);
+                const isPaid = (type || '').toLowerCase() === 'paid';
+
                 const scoreClass = matchScore >= 90 ? 'excellent' : matchScore >= 80 ? 'good' : matchScore >= 70 ? 'fair' : 'basic';
-                const isPaid = (internship.paid_unpaid || internship.type || 'Paid').toLowerCase() === 'paid';
-                
+
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>
-                        <button class="btn-view" onclick="viewInternshipDetails(${index})" title="View Details">
+                        <button class="btn-view" onclick="viewInternship('${legacy.id || rec.id || ''}')" title="View Details">
                             <i class="fas fa-eye"></i> View
                         </button>
-                        <button class="btn-apply" onclick="applyForInternshipAI(${index})" title="Apply Now">
+                        <button class="btn-apply" onclick="applyToInternship('${legacy.id || rec.id || ''}')" title="Apply Now">
                             <i class="fas fa-paper-plane"></i> Apply
                         </button>
                     </td>
-                    <td>
-                        <div style="font-weight: 600; margin-bottom: 4px;">
-                            ${internship.internship_title || internship.title || 'N/A'}
-                        </div>
-                        ${internship.aiReason ? `<small style="color: #8e44ad; font-style: italic;"><i class="fas fa-lightbulb"></i> ${internship.aiReason}</small>` : ''}
-                    </td>
-                    <td>
-                        <div style="font-weight: 500;">${internship.organization_name || internship.company || 'N/A'}</div>
-                        ${internship.sector ? `<small style="color: #4a90e2;">${internship.sector}</small>` : ''}
-                    </td>
-                    <td>${internship.internship_location || internship.location || 'Remote'}</td>
-                    <td>
-                        <span class="type-badge ${isPaid ? 'paid' : 'unpaid'}">
-                            ${isPaid ? 'Paid' : 'Unpaid'}
-                        </span>
-                    </td>
-                    <td>${isPaid ? '₹10,000-25,000' : 'Certificate + Experience'}</td>
-                    <td>
-                        <div class="match-score ${scoreClass}" title="AI compatibility score">
-                            <span style="font-weight: 600;">${matchScore}%</span>
-                            <div style="font-size: 10px; margin-top: 2px;">AI Match</div>
-                        </div>
-                    </td>
-                    <td>${internship.no_of_opportunity || internship.opportunities || '5-10'}</td>
+                    <td>${legacy.id || rec.id || ''}</td>
+                    <td>${company}</td>
+                    <td>${location}</td>
+                    <td><span style="text-transform: capitalize; color: ${isPaid ? '#28a745' : '#666'}; font-weight: 600;">${type}</span></td>
+                    <td>${salary}</td>
+                    <td><span style="color: ${matchScore >= 80 ? '#28a745' : matchScore >= 60 ? '#ff7a00' : '#dc3545'}; font-weight: 600;">${matchScore}%</span></td>
+                    <td>${opportunities}</td>
                 `;
-                
+
                 tbody.appendChild(row);
             });
         }

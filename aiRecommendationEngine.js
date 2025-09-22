@@ -8,6 +8,11 @@ const AIRecommendationEngine = {
     userProfile: null,
     recommendations: [],
     
+    // Configuration flags
+    config: {
+        enableFairness: false // Toggle fairness adjustments globally
+    },
+    
     // Cache for performance
     cache: {
         lastUserProfileHash: null,
@@ -44,7 +49,7 @@ const AIRecommendationEngine = {
     },
 
     // Generate personalized recommendations for a user
-    async generateRecommendations(userProfile, forceRefresh = false) {
+    async generateRecommendations(userProfile, forceRefresh = false, fairnessMode = null) {
         if (!this.isInitialized) {
             await this.initialize();
         }
@@ -70,13 +75,15 @@ const AIRecommendationEngine = {
                 // Use AI-powered recommendations
                 console.log('🧠 Using AI-powered matching...');
                 recommendations = await LLMService.generateRecommendations(
-                    userProfile, 
-                    internshipData
+                    userProfile,
+                    internshipData,
+                    { fairnessEnabled: fairnessMode == null ? this.config.enableFairness : !!fairnessMode }
                 );
             } else {
                 // Use rule-based fallback
                 console.log('⚙️ Using rule-based matching...');
-                recommendations = this.generateRuleBasedRecommendations(userProfile, internshipData);
+                recommendations = this.generateRuleBasedRecommendations(userProfile, internshipData,
+                    fairnessMode == null ? this.config.enableFairness : !!fairnessMode);
             }
 
             // Add additional metadata and sort
@@ -133,12 +140,27 @@ const AIRecommendationEngine = {
     },
 
     // Generate rule-based recommendations as fallback
-    generateRuleBasedRecommendations(userProfile, internshipData) {
+    generateRuleBasedRecommendations(userProfile, internshipData, fairnessEnabled = false) {
         console.log('🔧 Generating rule-based recommendations...');
         
         // Score each internship
         const scoredInternships = internshipData.map(internship => {
-            const score = this.calculateCompatibilityScore(userProfile, internship);
+            let score = this.calculateCompatibilityScore(userProfile, internship);
+
+            // Capacity penalty: if remaining_slots exists and <20% left, reduce 15%
+            const remainingSlots = parseInt(internship.remaining_slots ?? internship.opportunities ?? internship['Numer of Openings']) || 0;
+            const totalSlots = parseInt(internship.opportunities ?? internship['Numer of Openings']) || remainingSlots || 1;
+            if (totalSlots > 0 && remainingSlots > 0) {
+                const remainingRatio = remainingSlots / totalSlots;
+                if (remainingRatio < 0.2) {
+                    score = Math.floor(score * 0.85);
+                }
+            }
+
+            // Fairness boost
+            if (fairnessEnabled) {
+                score = this.applyFairnessBoost(score, userProfile, internship);
+            }
             return {
                 ...internship,
                 compatibility_score: score,
@@ -319,6 +341,29 @@ const AIRecommendationEngine = {
         benefits.push('🎓 Skill development');
         
         return benefits;
+    },
+
+    // Apply fairness adjustments based on profile and region
+    applyFairnessBoost(baseScore, userProfile, internship) {
+        let adjusted = baseScore;
+        const category = (userProfile.category || '').toLowerCase();
+        const district = (userProfile.district || '').toLowerCase();
+        const state = (userProfile.state || '').toLowerCase();
+
+        // Category-based boosts
+        if (['sc', 'st'].includes(category)) {
+            adjusted += 20;
+        } else if (category === 'obc') {
+            adjusted += 10;
+        }
+
+        // Simple rural heuristic: if district contains 'rural' or internship city absent
+        const internshipCity = (internship['Cities'] || internship.district || '').toLowerCase();
+        if (district.includes('rural') || (!internshipCity && state)) {
+            adjusted += 10;
+        }
+
+        return Math.min(100, adjusted);
     },
 
     // Cache management

@@ -34,12 +34,12 @@ const LLMService = {
     },
 
     // Generate AI-powered internship recommendations
-    async generateRecommendations(userProfile, internshipData) {
+    async generateRecommendations(userProfile, internshipData, options = {}) {
         try {
             console.log('Generating AI recommendations for user profile...');
             
             // Create a focused prompt for the LLM
-            const prompt = this.createRecommendationPrompt(userProfile, internshipData);
+            const prompt = this.createRecommendationPrompt(userProfile, internshipData, options);
             
             const response = await fetch(`${this.config.baseUrl}/api/generate`, {
                 method: 'POST',
@@ -75,7 +75,7 @@ const LLMService = {
     },
 
     // Create optimized prompt for internship matching
-    createRecommendationPrompt(userProfile, internships) {
+    createRecommendationPrompt(userProfile, internships, options = {}) {
         const userContext = `
 User Profile:
 - Name: ${userProfile.candidateName || userProfile.name}
@@ -91,12 +91,21 @@ User Profile:
             `${index + 1}. ${internship['Job Title']} at ${internship['Company Name']} (${internship['Cities']}, ${internship['States']}) - Stipend: ${internship['Stipend']}, Duration: ${internship['Duration']}`
         ).join('\n');
 
-        return `You are an AI career counselor specializing in internship recommendations for Indian students. 
+        const fairnessNote = options.fairnessEnabled ? `
+FAIRNESS CONSTRAINTS:
+- When ranking, consider social and regional diversity.
+- If user category is SC/ST/OBC or from rural/underrepresented districts, allow modest boosts (5-20%) in final match score where competitiveness is comparable.
+- Do not recommend oversubscribed internships: If remaining_slots are low (<20% of total), apply a penalty.
+` : '';
+
+        return `You are an AI career counselor specializing in internship recommendations for Indian students.
 
 ${userContext}
 
 Available Internships (showing top 20):
 ${internshipSummary}
+
+${fairnessNote}
 
 Task: Analyze the user's profile and rank the top 10 most suitable internships from the list above. Consider:
 
@@ -105,6 +114,8 @@ Task: Analyze the user's profile and rank the top 10 most suitable internships f
 3. Career Growth: Relevance to user's career aspirations
 4. Skill Development: Opportunity to develop relevant skills
 5. Company Reputation: Quality of work environment and learning
+6. Remaining Capacity: Penalize internships with very low remaining slots.
+7. Fairness (if note provided): Apply diversity-aware ranking when candidates are otherwise comparable.
 
 Provide response in this EXACT JSON format:
 {

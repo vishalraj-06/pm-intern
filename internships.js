@@ -5,92 +5,6 @@ const internshipManager = {
     // Internship data will be loaded from API
     internships: [],
     userProfile: null,
-        {
-            id: 'INT002',
-            role: 'Digital Marketing Intern',
-            sector: 'Marketing & Sales',
-            area: 'Digital Marketing',
-            state: 'Maharashtra',
-            district: 'Mumbai',
-            opportunities: 15,
-            applied: 0,
-            preferredGender: 'Any',
-            description: 'Assist in digital marketing campaigns and social media management',
-            qualifications: 'Bachelor of Business Administration',
-            course: 'Marketing',
-            specialization: 'Digital Marketing',
-            skills: 'SEO, Social Media, Google Analytics',
-            company: 'Marketing Solutions Ltd'
-        },
-        {
-            id: 'INT003',
-            role: 'Financial Analyst Intern',
-            sector: 'Banking & Finance',
-            area: 'Financial Analysis',
-            state: 'Delhi',
-            district: 'New Delhi',
-            opportunities: 10,
-            applied: 0,
-            preferredGender: 'Any',
-            description: 'Support financial analysis and reporting activities',
-            qualifications: 'Bachelor of Commerce',
-            course: 'Finance',
-            specialization: 'Corporate Finance',
-            skills: 'Excel, Financial Modeling, Analytics',
-            company: 'Finance Hub India'
-        },
-        {
-            id: 'INT004',
-            role: 'Content Writing Intern',
-            sector: 'Media & Communication',
-            area: 'Content Creation',
-            state: 'Tamil Nadu',
-            district: 'Chennai',
-            opportunities: 8,
-            applied: 0,
-            preferredGender: 'Any',
-            description: 'Create engaging content for various digital platforms',
-            qualifications: 'Bachelor of Arts',
-            course: 'English Literature',
-            specialization: 'Creative Writing',
-            skills: 'Writing, Research, SEO Writing',
-            company: 'Content Creators Co'
-        },
-        {
-            id: 'INT005',
-            role: 'Data Science Intern',
-            sector: 'Information Technology',
-            area: 'Data Analytics',
-            state: 'Telangana',
-            district: 'Hyderabad',
-            opportunities: 12,
-            applied: 0,
-            preferredGender: 'Any',
-            description: 'Work on data analysis and machine learning projects',
-            qualifications: 'Bachelor of Technology',
-            course: 'Computer Science Engineering',
-            specialization: 'Data Science',
-            skills: 'Python, R, Machine Learning, SQL',
-            company: 'Data Insights Pvt Ltd'
-        },
-        {
-            id: 'INT006',
-            role: 'HR Operations Intern',
-            sector: 'Human Resources',
-            area: 'HR Operations',
-            state: 'Gujarat',
-            district: 'Ahmedabad',
-            opportunities: 6,
-            applied: 0,
-            preferredGender: 'Any',
-            description: 'Support HR operations and recruitment activities',
-            qualifications: 'Master of Business Administration',
-            course: 'Human Resource Management',
-            specialization: 'HR Operations',
-            skills: 'Communication, MS Office, Recruitment',
-            company: 'HR Excellence Solutions'
-        }
-    ],
 
     // Applied internships (stored in localStorage)
     appliedInternships: [],
@@ -235,7 +149,7 @@ const internshipManager = {
                     ? `<button class="btn-withdraw" onclick="internshipManager.withdrawApplication('${internship.id}')">Withdraw</button>`
                     : `<button class="btn-apply" onclick="internshipManager.applyToInternship('${internship.id}')">Apply</button>`;
 
-                // Calculate match score
+                // Calculate match score - adapt to either internal or legacy field names
                 const matchScore = ApiService.calculateMatchScore(this.userProfile, internship);
                 const matchScoreHtml = `<span style="color: ${matchScore >= 80 ? '#28a745' : matchScore >= 60 ? '#ff7a00' : '#dc3545'}; font-weight: 600;">${matchScore}%</span>`;
 
@@ -336,6 +250,39 @@ const internshipManager = {
 
         if (this.appliedInternships.includes(internshipId)) {
             alert('You have already applied to this internship.');
+            return;
+        }
+
+        const currentUser = PMISAuth.getCurrentUser();
+        if (currentUser && typeof ApiService.getParticipationCount === 'function') {
+            // Check past participation (simple guard; in production rely on Supabase trigger/view)
+            ApiService.getParticipationCount(currentUser.id).then(count => {
+                if (count > 1) {
+                    alert('Participation limit reached: You cannot apply for more than one completed internship.');
+                    return;
+                }
+                // Proceed with applying
+                this.appliedInternships.push(internshipId);
+                this.saveAppliedInternships();
+                const internship = this.getInternshipById(internshipId);
+                if (internship) {
+                    internship.applied = 1;
+                }
+                this.updateAppliedCounts();
+                this.renderInternships();
+                console.log('Applied to internship:', internshipId);
+            }).catch(() => {
+                // On error, fall back to existing behavior
+                this.appliedInternships.push(internshipId);
+                this.saveAppliedInternships();
+                const internship = this.getInternshipById(internshipId);
+                if (internship) {
+                    internship.applied = 1;
+                }
+                this.updateAppliedCounts();
+                this.renderInternships();
+                console.log('Applied to internship:', internshipId);
+            });
             return;
         }
 

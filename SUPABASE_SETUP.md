@@ -231,3 +231,105 @@ If you encounter issues during setup:
 2. Verify your database schema matches exactly
 3. Test API calls in Supabase API explorer
 4. Check browser console for errors
+
+## Fairness & Allocation Extensions
+
+### Diversity Statistics View
+```sql
+-- Aggregate applications by category and location for monitoring representation
+CREATE OR REPLACE VIEW diversity_stats AS
+SELECT 
+  up.category,
+  up.state,
+  up.district,
+  COUNT(a.id) AS applications_count
+FROM user_profiles up
+LEFT JOIN applications a ON a.user_id = up.user_id
+GROUP BY up.category, up.state, up.district;
+```
+
+### Participation Limit (at most 1 completed internship)
+
+Add status to applications if not present and a completed flag, or manage via status transitions.
+
+```sql
+-- Ensure applications has status including 'completed'
+ALTER TABLE applications 
+  ALTER COLUMN status TYPE VARCHAR(20);
+
+-- Optional: track per-user completed count via a materialized view or function
+CREATE OR REPLACE FUNCTION get_participation_count(p_user_id BIGINT)
+RETURNS INTEGER AS $$
+  SELECT COUNT(*) FROM applications 
+  WHERE user_id = p_user_id AND status = 'completed';
+$$ LANGUAGE SQL STABLE;
+```
+
+Frontend should consult a secure RPC or view; maintain RLS accordingly.
+
+### Dynamic Capacity: remaining_slots
+
+```sql
+-- Add remaining_slots to internships
+ALTER TABLE internships ADD COLUMN IF NOT EXISTS remaining_slots INTEGER;
+
+-- Initialize remaining_slots = opportunities for existing rows
+UPDATE internships SET remaining_slots = opportunities WHERE remaining_slots IS NULL;
+
+-- On application create (pending) decrement remaining_slots if available
+CREATE OR REPLACE FUNCTION decrement_remaining_slots()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.internship_id IS NOT NULL THEN
+    UPDATE internships
+      SET remaining_slots = GREATEST(remaining_slots - 1, 0)
+      WHERE id = NEW.internship_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_applications_decrement ON applications;
+CREATE TRIGGER trg_applications_decrement
+AFTER INSERT ON applications
+FOR EACH ROW EXECUTE FUNCTION decrement_remaining_slots();
+
+-- On application withdrawal or rejection, increment remaining_slots
+CREATE OR REPLACE FUNCTION increment_remaining_slots()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.internship_id IS NOT NULL THEN
+    UPDATE internships
+      SET remaining_slots = LEAST(remaining_slots + 1, opportunities)
+      WHERE id = OLD.internship_id;
+  END IF;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_applications_delete_increment ON applications;
+CREATE TRIGGER trg_applications_delete_increment
+AFTER DELETE ON applications
+FOR EACH ROW EXECUTE FUNCTION increment_remaining_slots();
+
+-- On status change from pending to withdrawn/rejected -> increment
+CREATE OR REPLACE FUNCTION adjust_slots_on_status_change()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.status IN ('pending','reviewed') AND NEW.status IN ('withdrawn','rejected') THEN
+    UPDATE internships
+      SET remaining_slots = LEAST(remaining_slots + 1, opportunities)
+      WHERE id = NEW.internship_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_applications_status_adjust ON applications;
+CREATE TRIGGER trg_applications_status_adjust
+AFTER UPDATE OF status ON applications
+FOR EACH ROW EXECUTE FUNCTION adjust_slots_on_status_change();
+```
+
+### RLS considerations
+Ensure appropriate policies allow reading `diversity_stats`, and that slot adjustments happen via triggers without exposing service keys on the frontend.

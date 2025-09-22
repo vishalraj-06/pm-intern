@@ -26,15 +26,54 @@ const PMISAuth = {
     // Login function
     login: function(identifier, password) {
         return new Promise((resolve, reject) => {
-            // Simulate API delay
+            // Prefer ApiService login to ensure consistent user IDs
+            if (typeof window.ApiService !== 'undefined' && window.ApiService && typeof window.ApiService.login === 'function') {
+                window.ApiService.login(identifier, password)
+                    .then(user => {
+                        const userSession = {
+                            id: user.id,
+                            name: user.name,
+                            email: user.email,
+                            mobile: user.mobile,
+                            loginTime: new Date().toISOString(),
+                            isLoggedIn: true
+                        };
+                        localStorage.setItem('pmis_user_session', JSON.stringify(userSession));
+                        resolve(userSession);
+                    })
+                    .catch(err => {
+                        // Fallback to dummy users if ApiService login fails (dev convenience)
+                        setTimeout(() => {
+                            const user = this.dummyUsers.find(u => 
+                                (u.email === identifier || u.mobile === identifier) && u.password === password
+                            );
+
+                            if (user) {
+                                const userSession = {
+                                    id: user.email,
+                                    name: user.name,
+                                    email: user.email,
+                                    mobile: user.mobile,
+                                    loginTime: new Date().toISOString(),
+                                    isLoggedIn: true
+                                };
+                                localStorage.setItem('pmis_user_session', JSON.stringify(userSession));
+                                resolve(userSession);
+                            } else {
+                                reject(new Error(err && err.message ? err.message : 'Invalid email/mobile or password'));
+                            }
+                        }, 300);
+                    });
+                return;
+            }
+
+            // Legacy dummy login (no ApiService available)
             setTimeout(() => {
-                // Find user by email or mobile
                 const user = this.dummyUsers.find(u => 
                     (u.email === identifier || u.mobile === identifier) && u.password === password
                 );
 
                 if (user) {
-                    // Store user session in localStorage
                     const userSession = {
                         id: user.email,
                         name: user.name,
@@ -43,27 +82,94 @@ const PMISAuth = {
                         isLoggedIn: true
                     };
                     localStorage.setItem('pmis_user_session', JSON.stringify(userSession));
-                    console.log('Login successful for:', user.name);
                     resolve(userSession);
                 } else {
                     reject(new Error('Invalid email/mobile or password'));
                 }
-            }, 500); // Simulate network delay
+            }, 500);
         });
     },
 
     // Register function
     register: function(userData) {
         return new Promise((resolve, reject) => {
-            // Simulate API delay
-            setTimeout(() => {
-                // Basic validation
-                if (!userData.name || !userData.email || !userData.mobile || !userData.password) {
-                    reject(new Error('All fields are required'));
-                    return;
-                }
+            // Basic validation
+            if (!userData || !userData.name || !userData.email || !userData.mobile || !userData.password) {
+                reject(new Error('All fields are required'));
+                return;
+            }
 
-                // Check if user already exists
+            // If ApiService is available, use it to create user and profile
+            if (typeof window.ApiService !== 'undefined' && window.ApiService && typeof window.ApiService.register === 'function') {
+                window.ApiService.register({
+                    name: userData.name,
+                    email: userData.email,
+                    mobile: userData.mobile,
+                    password: userData.password
+                }).then(createdUser => {
+                    const userId = createdUser.id;
+
+                    // Persist profile details captured during registration
+                    if (typeof window.ApiService.saveUserProfile === 'function') {
+                        const profilePayload = {
+                            candidate_name: userData.name,
+                            mobile_number: userData.mobile,
+                            email_address: userData.email,
+                            qualification: userData.qualification,
+                            course: userData.course,
+                            specialization: userData.specialization,
+                            skills: userData.skills,
+                            preferred_location: userData.preferredLocation,
+                            preferred_industry: userData.preferredIndustry,
+                            state: userData.state,
+                            district: userData.district,
+                            career_goals: userData.careerGoals,
+                            internship_type: userData.internshipType,
+                            duration_preference: userData.durationPreference
+                        };
+                        console.log('Saving profile for user:', userId, profilePayload);
+                        return window.ApiService.saveUserProfile(userId, profilePayload).then(result => {
+                            console.log('Profile saved successfully:', result);
+                            return result;
+                        }).catch(err => {
+                            console.error('Failed to save profile:', err);
+                            return null;
+                        });
+                    }
+                    return null;
+                }).then(() => {
+                    // Auto-login after registration using ApiService login
+                    return this.login(userData.email, userData.password);
+                }).then(session => {
+                    resolve(session);
+                }).catch(err => {
+                    // Fallback to legacy behavior if ApiService is unavailable or fails
+                    setTimeout(() => {
+                        const existingUser = this.dummyUsers.find(u => 
+                            u.email === userData.email || u.mobile === userData.mobile
+                        );
+                        if (existingUser) {
+                            reject(new Error('User with this email or mobile already exists'));
+                            return;
+                        }
+                        // Simulate success and auto-login
+                        const userSession = {
+                            id: userData.email,
+                            name: userData.name,
+                            email: userData.email,
+                            mobile: userData.mobile,
+                            loginTime: new Date().toISOString(),
+                            isLoggedIn: true
+                        };
+                        localStorage.setItem('pmis_user_session', JSON.stringify(userSession));
+                        resolve(userSession);
+                    }, 800);
+                });
+                return;
+            }
+
+            // Legacy fallback registration (no ApiService)
+            setTimeout(() => {
                 const existingUser = this.dummyUsers.find(u => 
                     u.email === userData.email || u.mobile === userData.mobile
                 );
@@ -73,10 +179,6 @@ const PMISAuth = {
                     return;
                 }
 
-                // For now, just simulate successful registration
-                // In real implementation, this would save to database
-                console.log('Registration successful for:', userData.name);
-                
                 // Auto-login after registration
                 const userSession = {
                     id: userData.email,
@@ -88,7 +190,7 @@ const PMISAuth = {
                 };
                 localStorage.setItem('pmis_user_session', JSON.stringify(userSession));
                 resolve(userSession);
-            }, 800); // Simulate network delay
+            }, 800);
         });
     },
 
@@ -96,7 +198,6 @@ const PMISAuth = {
     isLoggedIn: function() {
         const session = localStorage.getItem('pmis_user_session');
         if (!session) return false;
-        
         try {
             const userSession = JSON.parse(session);
             return userSession.isLoggedIn === true;
@@ -109,7 +210,6 @@ const PMISAuth = {
     getCurrentUser: function() {
         const session = localStorage.getItem('pmis_user_session');
         if (!session) return null;
-        
         try {
             return JSON.parse(session);
         } catch (e) {
@@ -120,30 +220,27 @@ const PMISAuth = {
     // Logout function
     logout: function() {
         localStorage.removeItem('pmis_user_session');
-        console.log('User logged out');
         return Promise.resolve();
     },
 
     // Initialize auth state on page load
     init: function() {
-        console.log('PMISAuth initialized');
-        
         // Display dummy credentials in console for developers
-        console.log('=== DUMMY LOGIN CREDENTIALS ===');
-        this.dummyUsers.forEach((user, index) => {
-            console.log(`User ${index + 1}:`);
-            console.log(`Email: ${user.email}`);
-            console.log(`Mobile: ${user.mobile}`);
-            console.log(`Password: ${user.password}`);
-            console.log('---');
-        });
+        try {
+            console.log('=== DUMMY LOGIN CREDENTIALS ===');
+            this.dummyUsers.forEach((user, index) => {
+                console.log(`User ${index + 1}:`);
+                console.log(`Email: ${user.email}`);
+                console.log(`Mobile: ${user.mobile}`);
+                console.log(`Password: ${user.password}`);
+                console.log('---');
+            });
+        } catch (e) {}
     }
 };
 
-// Auto-initialize when script loads
 document.addEventListener('DOMContentLoaded', function() {
     PMISAuth.init();
 });
 
-// Export for use in other scripts (if needed)
 window.PMISAuth = PMISAuth;
