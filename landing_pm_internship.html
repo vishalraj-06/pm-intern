@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PM Internship Scheme | Landing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:#2d4f93; /* MCA Blue */
+      --accent:#ff7a00;  /* Orange CTA */
+      --text:#222;
+      --muted:#666;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --success:#28a745;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+    /* Top Government bar */
+    .govbar{background:#000;color:#fff;font-size:12px;padding:6px 12px;display:flex;gap:8px;align-items:center}
+    .govbar .flag{width:18px;height:12px;background:linear-gradient(#f93,#fff,#128807)}
+
+    /* Header */
+    .header{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06);position:sticky;top:0;z-index:10}
+    .header .wrap{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .emblem{width:44px;height:44px;border-radius:50%;background:radial-gradient(#d9e6ff,#b9cff9);display:grid;place-items:center;font-weight:800;color:var(--primary)}
+    .title{display:flex;flex-direction:column;line-height:1}
+    .title small{font-size:11px;color:#333;font-weight:600}
+    .title strong{font-size:18px;color:var(--primary)}
+
+    .nav{display:flex;align-items:center;gap:14px}
+    .nav a{color:var(--text);text-decoration:none;font-weight:600;font-size:14px;padding:8px 10px;border-radius:6px}
+    .nav a:hover{background:#f0f4ff}
+
+    .btn{border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:#1b2f59}
+    .btn-accent{background:var(--accent);color:#fff}
+    .btn-accent:hover{filter:brightness(.95)}
+    .btn-outline{background:#fff;border:1px solid #d9e1f1;color:var(--primary)}
+
+    /* Hero */
+    .hero{background:linear-gradient(135deg,#5c7ed6 0%, #7c58d3 50%, #a164ff 100%);color:#fff}
+    .hero .wrap{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;padding:48px 16px}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);padding:6px 10px;border-radius:999px;font-weight:600}
+    .hero h1{font-size:40px;margin:14px 0 8px}
+    .hero p{color:#eef;max-width:640px}
+    .hero-cta{display:flex;gap:12px;margin-top:18px}
+    .hero-card{background:#fff;color:#222;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:18px}
+    .hero-card h3{margin:6px 0 8px;font-size:16px}
+
+    /* Marquee partners */
+    .partners{background:#fff}
+    .partners .wrap{max-width:1200px;margin:auto;padding:18px 16px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;opacity:.85}
+    .pill{padding:8px 12px;border:1px dashed #d9d9d9;border-radius:999px;font-weight:700;color:#555}
+
+    /* Eligibility + Benefits */
+    .section{max-width:1200px;margin:28px auto;padding:0 16px}
+    .section h2{font-size:28px;color:#000;margin:8px 0 18px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(21,41,91,.08);padding:18px}
+
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .info{background:#f6f9ff;border:1px solid #dbe6ff;border-radius:12px;padding:14px;text-align:center}
+    .info b{display:block;font-size:18px;color:#000;margin-top:8px}
+    .info small{color:#5b6b8b}
+
+    /* Footer */
+    .footer{background:var(--primary);color:#cfd7ff;margin-top:28px}
+    .footer .wrap{max-width:1200px;margin:auto;padding:18px 16px;display:flex;justify-content:space-between;align-items:center}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:50}
+    .modal.open{display:flex}
+    .modal-card{background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);width:min(480px,92vw);overflow:hidden}
+    .modal-head{background:var(--primary);color:#fff;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+    .modal-body{padding:16px}
+    .field{margin-bottom:12px}
+    label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+    input,select{width:100%;padding:10px 12px;border:1px solid #d7dbe8;border-radius:8px;font-size:14px}
+    .row{display:flex;gap:10px}
+
+    @media (max-width:900px){
+      .hero .wrap{grid-template-columns:1fr}
+      .two-col{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media (max-width:600px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="govbar"><span class="flag"></span> भारत सरकार / Government of India</div>
+
+  <header class="header">
+    <div class="wrap">
+      <div class="brand">
+        <div class="emblem">MCA</div>
+        <div class="title">
+          <small>MINISTRY OF CORPORATE AFFAIRS</small>
+          <strong>PM Internship</strong>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#eligibility">Eligibility</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#docs">Guidelines</a>
+        <button class="btn btn-outline" id="btnLoginTop">Login</button>
+        <button class="btn btn-accent" id="btnRegisterTop">Youth Registration</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="badge">🎓 National Internship Programme</span>
+        <h1>Accepted the Offer — But not Joined yet?</h1>
+        <p>Don’t worry — the window is still open! Reach out to the company that made you the offer. Contact details are in your offer letter.</p>
+        <div class="hero-cta">
+          <button class="btn btn-accent" id="ctaRegister">Youth Registration</button>
+          <button class="btn btn-primary" id="ctaLogin">Login to Dashboard</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Quick Links</h3>
+        <div class="row">
+          <button class="btn btn-outline" onclick="document.getElementById('eligibility').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
+          <button class="btn btn-outline" onclick="document.getElementById('benefits').scrollIntoView({behavior:'smooth'})">View Benefits</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="partners">
+    <div class="wrap">
+      <span class="pill">ACC</span>
+      <span class="pill">ZOHO</span>
+      <span class="pill">BPCL</span>
+      <span class="pill">SBI</span>
+      <span class="pill">Titan</span>
+      <span class="pill">CCL</span>
+      <span class="pill">Reliance</span>
+    </div>
+  </section>
+
+  <section class="section two-col" id="eligibility">
+    <div class="card">
+      <h2>Are you <span style="color:#ff7a00">Eligible</span>?</h2>
+      <div class="grid">
+        <div class="info"><b>Age</b><small>21-24 Years</small></div>
+        <div class="info"><b>Job Status</b><small>Not Employed Full Time</small></div>
+        <div class="info"><b>Education</b><small>Not Enrolled Full Time</small></div>
+        <div class="info"><b>Family Income</b><small>No one earning > ₹8 Lakh PA</small></div>
+        <div class="info"><b>Govt. Employment</b><small>No member has a Govt. job</small></div>
+        <div class="info"><b>Other Schemes</b><small>Not in Apprenticeship/NATS/NAPS</small></div>
+      </div>
+    </div>
+    <div class="card" id="benefits">
+      <h2>Core Benefits <span style="color:#ff7a00">for PM Internship Scheme</span></h2>
+      <div class="grid">
+        <div class="info"><b>12 months real-life experience</b><small>with India’s top companies</small></div>
+        <div class="info"><b>Monthly assistance</b><small>₹4500 by GoI + ₹500 by Industry</small></div>
+        <div class="info"><b>One-time grant</b><small>₹6000 for incidentals</small></div>
+        <div class="info"><b>Choose from sectors</b><small>and top companies of India</small></div>
+        <div class="info"><b>Mentorship</b><small>Guided learning and growth</small></div>
+        <div class="info"><b>Nationwide opportunities</b><small>State/District-wise listings</small></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>© PM Internship Scheme, MCA. All rights reserved.</div>
+      <div>Technical collaboration with BISAG-N</div>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal">
+    <div class="modal-card">
+      <div class="modal-head">Login <button class="btn btn-outline" onclick="closeModal('loginModal')">✕</button></div>
+      <div class="modal-body">
+        <form id="loginForm">
+          <div class="field">
+            <label for="loginId">Email or Mobile</label>
+            <input id="loginId" name="loginId" required placeholder="Enter email or mobile"/>
+          </div>
+          <div class="field">
+            <label for="loginPass">Password</label>
+            <input id="loginPass" name="loginPass" type="password" required placeholder="Enter password"/>
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registration Modal -->
+  <div class="modal" id="registerModal">
+    <div class="modal-card">
+      <div class="modal-head">Youth Registration <button class="btn btn-outline" onclick="closeModal('registerModal')">✕</button></div>
+      <div class="modal-body">
+        <form id="registerForm">
+          <div class="field"><label for="name">Full Name</label><input id="name" name="name" required/></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required/></div>
+          <div class="row">
+            <div class="field" style="flex:1"><label for="mobile">Mobile</label><input id="mobile" name="mobile" required/></div>
+            <div class="field" style="flex:1"><label for="password">Password</label><input id="password" name="password" type="password" required/></div>
+          </div>
+          <button class="btn btn-accent" type="submit" style="width:100%">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="pmis_auth.js"></script>
+  <script>
+    // Wire buttons → modals
+    const open = id => document.getElementById(id).classList.add('open');
+    const closeModal = id => document.getElementById(id).classList.remove('open');
+
+    document.getElementById('btnLoginTop').onclick = () => open('loginModal');
+    document.getElementById('btnRegisterTop').onclick = () => open('registerModal');
+    document.getElementById('ctaLogin').onclick = () => open('loginModal');
+    document.getElementById('ctaRegister').onclick = () => open('registerModal');
+
+    // On submit → call auth helper
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const id = (document.getElementById('loginId').value||'').trim();
+      const pw = (document.getElementById('loginPass').value||'').trim();
+      PMISAuth.login(id, pw)
+        .then(() => window.location.href = 'pm_internship_portal.html')
+        .catch(err => alert(err.message));
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        mobile: document.getElementById('mobile').value.trim(),
+        password: document.getElementById('password').value
+      };
+      PMISAuth.register(payload)
+        .then(() => window.location.href = 'pm_internship_portal.html')
+        .catch(err => alert(err.message));
+    });
+  </script>
+</body>
+</html>
